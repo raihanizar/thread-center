@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  NEWS
+  POLITICS
+  TECHNOLOGY
+  ENTERTAINMENT
+  SPORTS
+  PERSONAL_DEVELOPMENT
+  CULTURE
+  EDUCATION
+  HUMOR
+  HEALTH_AND_WELLNESS
+}
+
+model User {
+  id String @id @default(cuid())
+  firstName String
+  lastName String
+  username String @unique
+  email String @unique
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  thread Thread[]
+}
+
+model Thread {
+  id String @id @default(cuid())
+  threadId String
+  category Category
+  url String
+  authorId String
+  content String
+  like_count Int
+  thread_date DateTime
+  createdAt DateTime @default(now())
+
+  userId String
+  user User @relation(fields: [userId], references: [id])
+}
