@@ -17,8 +17,8 @@ export async function POST(req) {
     // Jika user tidak ditemukan, kirim pesan error
     if (!findUser) {
       return NextResponse.json(
-        { errorMessage: "Invalid Credentials" },
-        { status: 404 }
+        { errorMessage: "Wrong username/password." },
+        { status: 401 }
       );
     }
 
@@ -28,7 +28,7 @@ export async function POST(req) {
     // Jika password tidak cocok, kirim pesan error
     if (!comparePassword) {
       return NextResponse.json(
-        { errorMessage: "Invalid Credentials" },
+        { errorMessage: "Wrong username/password." },
         { status: 401 }
       );
     }
@@ -36,16 +36,14 @@ export async function POST(req) {
     // Jika password cocok, buat JWT TOKEN
     const payload = {
       id: findUser.id,
-      firstName: findUser.firstName,
-      lastName: findUser.lastName,
-      username: findUser.username,
       email: findUser.email,
+      username: findUser.username,
     };
 
     // Buat token
     const token = sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });
     const res = NextResponse.json(
-      { data: payload, message: "Login succesfully" },
+      { data: payload, message: "Login succesful" },
       { status: 200 }
     );
     res.cookies.set("token", token);
@@ -53,9 +51,9 @@ export async function POST(req) {
     return res;
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { errorMessage: "Something went wrong. Please try again later" },
-      { status: 500 }
-    );
+    // return NextResponse.json(
+    //   { errorMessage: "Something went wrong. Please try again later" },
+    //   { status: 500 }
+    // );
   }
 }
