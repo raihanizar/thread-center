@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 export const Register = () => {
+  const router = useRouter();
   const [registerData, setRegisterData] = useState({
-    firstName: "",
-    lastName: "",
     username: "",
     email: "",
     password: "",
@@ -21,11 +21,12 @@ export const Register = () => {
   }
 
   async function handleRegister() {
-    const { firstName, lastName, username, email, password } = registerData;
-    console.log({ firstName, lastName, username, email, password });
+    const { username, email, password } = registerData;
+    console.log({ username, email, password });
 
-    if (!firstName || !lastName || !username || !email || !password) {
+    if (!username || !email || !password) {
       console.log("all fields must be filed");
+      toast.error("all fields must be filed");
       return;
     }
 
@@ -34,17 +35,18 @@ export const Register = () => {
       body: JSON.stringify(registerData),
     });
 
-    if (res.status === 500) {
-      const { errorMessage } = await res.json();
-      console.log(errorMessage);
-      toast.error(errorMessage);
+    if (res.status === 400 || res.status === 401) {
+      const { message } = await res.json();
+      console.log(message);
+      toast.error(message);
       return;
     }
 
     const { data, message } = await res.json();
     toast.success(message);
-
-    console.log(data);
+    // window.location.replace("/login");
+    router.push("/login");
+    console.log({ data, message });
   }
 
   return (
@@ -72,30 +74,6 @@ export const Register = () => {
               </p>
             </div>
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <label htmlFor="first-name">First Name</label>
-                  <input
-                    name="firstName"
-                    placeholder="First name"
-                    type="text"
-                    onChange={handleChangeInput}
-                    required
-                    className="input input-primary w-full"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="last-name">Last Name</label>
-                  <input
-                    name="lastName"
-                    type="text"
-                    placeholder="Last name"
-                    onChange={handleChangeInput}
-                    required
-                    className="input input-primary w-full"
-                  />
-                </div>
-              </div>
               <div className="flex flex-col space-y-2">
                 <label htmlFor="username">Username</label>
                 <input
@@ -146,42 +124,6 @@ export const Register = () => {
           </div>
         </div>
       </div>
-
-      {/* register lama
-      <div className="text-center">
-        <h1>Register</h1>
-        <p>Create an account for digicommerce</p>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <input
-          name="firstName"
-          placeholder="First name"
-          onChange={handleChangeInput}
-        />
-        <input
-          name="lastName"
-          placeholder="Last name"
-          onChange={handleChangeInput}
-        />
-      </div>
-      <input
-        name="username"
-        placeholder="username"
-        onChange={handleChangeInput}
-      />
-      <input
-        name="email"
-        type="email"
-        placeholder="email@domain.com"
-        onChange={handleChangeInput}
-      />
-      <input
-        name="password"
-        type="password"
-        placeholder="password"
-        onChange={handleChangeInput}
-      />
-      <button onClick={handleRegister}>Register</button> */}
     </main>
   );
 };

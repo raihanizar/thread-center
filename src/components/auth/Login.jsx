@@ -1,12 +1,10 @@
 "use client";
 import { siteUrl } from "@/config/siteUrl";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
 export const Login = () => {
-  const router = useRouter();
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
@@ -24,6 +22,7 @@ export const Login = () => {
 
     if (!email || !password) {
       console.log("all fields must be filed");
+      toast.error("all fields must be filed");
       return;
     }
 
@@ -42,43 +41,11 @@ export const Login = () => {
     const { data, message } = await res.json();
     localStorage.setItem("user", JSON.stringify(data));
     toast.success(message);
-    // router.push("/");
-    // console.log(data);
-    window.location.replace(siteUrl);
+    window.location.replace("/dashboard");
   }
 
   return (
     <main className="space-y-6">
-      {/* <div className="font-medium tracking-tight text-base">Digicommerce.</div>
-      <div className="">
-        <h1>Login</h1>
-        <p>Welcome back!</p>
-      </div>
-      <div className="space-y-3">
-        <input
-          name="email"
-          placeholder="email@domain.com"
-          onChange={handleChangeInput}
-        />
-        <input
-          name="password"
-          placeholder="password"
-          type="password"
-          onChange={handleChangeInput}
-        />
-        <button className="btn-md" onClick={handleLogin}>
-          Login
-        </button>
-      </div>
-      <div>
-        <div>
-          Don&apos;t have an account ?{" "}
-          <Link href="/register" className="link">
-            <span>Register</span>
-          </Link>
-        </div>
-      </div> */}
-
       {/* // login baru */}
       <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] bg-slate-50">
         <div className="flex items-center justify-center py-12">

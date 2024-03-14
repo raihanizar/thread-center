@@ -3,12 +3,26 @@ import bcrypt from "bcrypt";
 import prisma from "@/utils/prisma";
 
 export async function POST(req) {
-  const { firstName, lastName, username, email, password } = await req.json();
-  console.log({ firstName, lastName, username, email, password });
+  const { username, email, password } = await req.json();
+  console.log({ username, email, password });
   /**
    * TODO
    * - Input Validation
    */
+  // Check if email is already registered
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  // If user already exists, return error message
+  if (existingUser) {
+    return NextResponse.json(
+      { message: "Email is already registered." },
+      { status: 400 }
+    );
+  }
 
   try {
     // Create hashed password
@@ -23,14 +37,11 @@ export async function POST(req) {
     });
 
     return NextResponse.json(
-      { data: createUser, message: "Register successful" },
+      { message: "Register successful" },
       { status: 200 }
     );
   } catch (error) {
     console.log(error);
-    return NextResponse.json(
-      { errorMessage: "email already exist" },
-      { status: 401 }
-    );
+    return NextResponse.json({ message: "error" }, { status: 401 });
   }
 }

@@ -43,17 +43,19 @@ export async function POST(req) {
     // Buat token
     const token = sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });
     const res = NextResponse.json(
-      { data: payload, message: "Login succesful" },
-      { status: 200 }
+      {
+        message: "Login succesful",
+        payload: payload,
+        token: token,
+      },
+      {
+        status: 200,
+      }
     );
     res.cookies.set("token", token);
 
     return res;
   } catch (error) {
     console.log(error);
-    // return NextResponse.json(
-    //   { errorMessage: "Something went wrong. Please try again later" },
-    //   { status: 500 }
-    // );
   }
 }

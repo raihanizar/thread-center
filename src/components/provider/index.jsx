@@ -7,6 +7,7 @@ export const Provider = ({ children }) => {
     <>
       {children}
       <Toaster
+        // duration="4000"
         position="top-right"
         reverseOrder={false}
         toastOptions={{
