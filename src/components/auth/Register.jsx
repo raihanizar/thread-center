@@ -30,6 +30,14 @@ export const Register = () => {
       return;
     }
 
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (!emailPattern.test(email)) {
+      // console.log("Invalid email format");
+      toast.error("Invalid email format");
+      return;
+    }
+
     const res = await fetch("/api/v1/auth/register", {
       method: "POST",
       body: JSON.stringify(registerData),
