@@ -2,12 +2,21 @@
 import Link from "next/link";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
 
 export const Login = () => {
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
+
+  // const [showPassword, setShowPassword] = useState(false);
+
+
+  // ngintip password
+  // function togglePasswordVisibility() {
+  //   setShowPassword(!showPassword);
+  // }
 
   function handleChangeInput(event) {
     setLoginData({
@@ -38,6 +47,7 @@ export const Login = () => {
     }
 
     const { data, message } = await res.json();
+
     localStorage.setItem("user", JSON.stringify(data));
     toast.success(message);
     window.location.replace("/dashboard");
@@ -67,24 +77,34 @@ export const Login = () => {
                   className="input input-primary"
                 />
               </div>
-              <div className="flex flex-col space-y-2">
+
+              <div className="flex flex-col space-y-2 relative">
+                <label htmlFor="password">Password</label>
                 <div className="flex items-center">
-                  <label htmlFor="password">Password</label>
-                  <Link
-                    className="ml-auto inline-block text-sm underline"
-                    href="#"
+                  {/* <div className="flex items-center">
+                    <label htmlFor="password">Password</label>
+                    <Link
+                      className="ml-auto inline-block text-sm underline"
+                      href="#"
+                    >
+                      Forgot your password?
+                    </Link>
+                  </div> */}
+                  <input
+                    required
+                    name="password"
+                    placeholder="password"
+                    type={showPassword ? "text" : "password"}
+                    onChange={handleChangeInput}
+                    className="input input-primary w-full"
+                  />
+                  {/* <div
+                    className="absolute top-14 right-3 transform -translate-y-1/2 cursor-pointer"
+                    onClick={togglePasswordVisibility}
                   >
-                    Forgot your password?
-                  </Link>
+                    {showPassword ? <Eye /> : <EyeOff />}{" "}
+                  </div> */}
                 </div>
-                <input
-                  required
-                  name="password"
-                  placeholder="password"
-                  type="password"
-                  onChange={handleChangeInput}
-                  className="input input-primary"
-                />
               </div>
               <button
                 className="w-full btn btn-active"

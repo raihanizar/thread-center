@@ -35,11 +35,11 @@ model Thread {
   id String @id @default(cuid())
   threadId String
   category Category
-  url String
-  authorId String
-  content String
-  like_count Int
-  thread_date DateTime
+  url String?
+  authorId String?
+  content String?
+  like_count Int?
+  thread_date DateTime?
   createdAt DateTime @default(now())
 
   userId String
