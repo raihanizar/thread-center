@@ -4,19 +4,15 @@ import prisma from "@/utils/prisma";
 
 export async function POST(req) {
   const { username, email, password } = await req.json();
-  // console.log({ username, email, password });
-  /**
-   * TODO
-   * - Input Validation
-   */
-  // Check if email is already registered
+
+  //cek apakah email sudah teregistrasi
   const existingUser = await prisma.user.findUnique({
     where: {
       email,
     },
   });
 
-  // If user already exists, return error message
+  // jika sudah teregistrasi, return ini
   if (existingUser) {
     return NextResponse.json(
       { message: "Email is already registered." },
@@ -25,9 +21,9 @@ export async function POST(req) {
   }
 
   try {
-    // Create hashed password
+    // bikin hashed password untuk user baru
     const hashedPassword = await bcrypt.hash(password, 10);
-    // Create user to database
+    // kirim user baru ke db
     const createUser = await prisma.user.create({
       data: {
         username,
