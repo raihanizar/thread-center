@@ -10,13 +10,13 @@ export const Login = () => {
     password: "",
   });
 
-  // const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
 
   // ngintip password
-  // function togglePasswordVisibility() {
-  //   setShowPassword(!showPassword);
-  // }
+  function togglePasswordVisibility() {
+    setShowPassword(!showPassword);
+  }
 
   function handleChangeInput(event) {
     setLoginData({
@@ -81,7 +81,7 @@ export const Login = () => {
               <div className="flex flex-col space-y-2 relative">
                 <label htmlFor="password">Password</label>
                 <div className="flex items-center">
-                  {/* <div className="flex items-center">
+                  <div className="flex items-center">
                     <label htmlFor="password">Password</label>
                     <Link
                       className="ml-auto inline-block text-sm underline"
@@ -89,7 +89,7 @@ export const Login = () => {
                     >
                       Forgot your password?
                     </Link>
-                  </div> */}
+                  </div>
                   <input
                     required
                     name="password"
@@ -98,12 +98,12 @@ export const Login = () => {
                     onChange={handleChangeInput}
                     className="input input-primary w-full"
                   />
-                  {/* <div
+                  <div
                     className="absolute top-14 right-3 transform -translate-y-1/2 cursor-pointer"
                     onClick={togglePasswordVisibility}
                   >
                     {showPassword ? <Eye /> : <EyeOff />}{" "}
-                  </div> */}
+                  </div>
                 </div>
               </div>
               <button
