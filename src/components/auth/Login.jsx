@@ -38,7 +38,7 @@ export const Login = () => {
       body: JSON.stringify(loginData),
     });
 
-    if (res.status === 401 || res.status === 404) {
+    if (res.status === 401) {
       const { errorMessage } = await res.json();
       console.log(errorMessage);
       toast.error(errorMessage);

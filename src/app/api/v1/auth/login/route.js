@@ -51,5 +51,6 @@ export async function POST(req) {
     return res;
   } catch (error) {
     console.log(error);
+    return NextResponse.json({ errorMessage: "error" }, { status: 401 });
   }
 }
