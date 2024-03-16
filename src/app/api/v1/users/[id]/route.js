@@ -59,7 +59,7 @@ export async function PATCH(req, { params }) {
 
     // If the password or username update is successful, create JWT token
     const payload = {
-      id: updatedUser.id,
+      // id: updatedUser.id,
       email: updatedUser.email,
       username: updatedUser.username,
     };
