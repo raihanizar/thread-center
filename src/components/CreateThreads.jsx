@@ -49,22 +49,26 @@ export const CreateThreads = () => {
   }
 
   return (
-    <main>
-      <div>CreateThreads</div>
+    <main className="bg-gray-100 p-6 flex flex-col items-center">
+      <div className="text-xl font-bold mb-4">Create Threads</div>
 
-      <form action={handleSubmitThread}>
-        <section>
-          <div>
-            <label>Add link here</label>
+      <form onSubmit={handleSubmitThread} className="max-w-md">
+        <section className="mb-4">
+          <div className="mb-2">
+            <label className="block mb-1 text-gray-700">Add link here</label>
             <input
               name="threadId"
               placeholder="example: twitter.com/sosmedkeras/status/1766114939583017046"
               onChange={handleUrlInput}
+              className="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
             />
           </div>
-          <div className="flex flex-col">
-            <label>Thread category</label>
-            <select name="category" className="border rounded-md h-full">
+          <div className="flex flex-col mb-2">
+            <label className="block mb-1 text-gray-700">Thread category</label>
+            <select
+              name="category"
+              className="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+            >
               <option value="NEWS">News</option>
               <option value="POLITICS">Politics</option>
               <option value="TECHNOLOGY">Technology</option>
@@ -78,7 +82,12 @@ export const CreateThreads = () => {
             </select>
           </div>
         </section>
-        <button>Submit Product</button>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+        >
+          Submit Thread
+        </button>
       </form>
     </main>
   );
