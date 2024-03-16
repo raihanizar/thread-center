@@ -36,7 +36,7 @@ export const UserInfo = () => {
   async function handleChangeUserInfo(event) {
     event.preventDefault();
 
-    const { newUsername, newPassword, confirmPassword } = userInfo;
+    const { newPassword, confirmPassword } = userInfo;
 
     // Check if confirmPassword is empty
     if (!newPassword || !confirmPassword) {

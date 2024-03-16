@@ -3,15 +3,16 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 
-export async function PATCH(req) {
-  const { email, newPassword, newUsername } = await req.json();
-
+export async function PATCH(req, { params }) {
+  const id = params.id;
+  const { newPassword, newUsername } = await req.json();
+  // console.log({ email, id });
 
   // find existing user
   try {
     const findUser = await prisma.user.findUnique({
       where: {
-        email,
+        id,
       },
     });
 
@@ -29,7 +30,7 @@ export async function PATCH(req) {
 
       await prisma.user.update({
         where: {
-          email,
+          id,
         },
         data: {
           password: hashedPassword,
@@ -41,7 +42,7 @@ export async function PATCH(req) {
     if (newUsername) {
       await prisma.user.update({
         where: {
-          email,
+          id,
         },
         data: {
           username: newUsername,
@@ -52,7 +53,7 @@ export async function PATCH(req) {
     // Fetch the updated user after updating username or password
     const updatedUser = await prisma.user.findUnique({
       where: {
-        email,
+        id,
       },
     });
 
@@ -66,7 +67,7 @@ export async function PATCH(req) {
     // Create token
     const token = sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });
     const res = NextResponse.json(
-      { data: payload, message: "Change user info successful." },
+      { message: "Change user info successful.", data: payload },
       { status: 200 }
     );
     res.cookies.set("token", token);
