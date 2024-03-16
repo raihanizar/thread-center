@@ -29,6 +29,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   thread Thread[]
+  bookmark Bookmark[]
 }
 
 model Thread {
@@ -44,4 +45,17 @@ model Thread {
 
   userId String
   user User @relation(fields: [userId], references: [id])
+  bookmarks   Bookmark[] // Many-to-many relationship between Thread and User
+}
+
+model Bookmark {
+  id          String     @id @default(cuid())
+  createdAt    DateTime   @default(now()) // timestamp when thread bookmarked
+  
+  userId      String
+  user        User       @relation(fields: [userId], references: [id]) // Each bookmark belongs to a single user
+
+  threadId    String
+  thread      Thread     @relation(fields: [threadId], references: [id]) // Each bookmark belongs to a single thread
+  @@unique([userId, threadId]) // Ensure only one bookmark per user per thread
 }
