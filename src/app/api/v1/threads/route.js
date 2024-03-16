@@ -9,9 +9,10 @@ export async function GET(req) {
   const query = searchParams.get("q");
   const category = searchParams.get("category");
   const userId = searchParams.get("userid");
+  const trending = searchParams.get("trending");
   
   // if search params is empty respond with error
-  if (!query && !category && !userId) {
+  if (!query && !category && !userId && !JSON.parse(trending)) {
     return NextResponse.json({ message: "Search parameter is not provided." }, { status: 400 });
   }
   
@@ -70,6 +71,24 @@ export async function GET(req) {
       }
     } catch (error) {
       console.error(error)
+      return NextResponse.json({ message: "An error occurred while fetching threads." }, { status: 500 });
+    }
+  }
+
+  // filter by trending (biggest like count descending)
+  if (JSON.parse(trending)) {
+    try {
+      const threads = await prisma.thread.findMany({
+        orderBy: {
+          like_count: 'desc'
+        },
+        take: 50
+      });
+      if (threads.length === 0) {
+        return NextResponse.json({ message: "No trending threads found." }, { status: 404 });
+      }
+      return NextResponse.json({ message: "Get trending threads successful", data: threads }, { status: 200 })
+    } catch {
       return NextResponse.json({ message: "An error occurred while fetching threads." }, { status: 500 });
     }
   }
