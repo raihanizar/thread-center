@@ -3,6 +3,41 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { sign } from "jsonwebtoken";
 
+export async function GET(req, { params }) {
+  const id = params.id;
+
+  try {
+    // find user based on id
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+
+      select: {
+        username: true,
+        email: true,
+      },
+    });
+
+    // if user is not found
+    if (!user) {
+      return NextResponse.json(
+        { errorMessage: "Can't get user. User not found.”" },
+        { status: 404 }
+      );
+    }
+
+    // if user found
+    return NextResponse.json(
+      { message: "Get user successful.", data: user },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.error("Internal Server Error", { status: 500 });
+  }
+}
+
 export async function PATCH(req, { params }) {
   const id = params.id;
   const { newPassword, newUsername } = await req.json();
