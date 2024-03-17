@@ -3,18 +3,28 @@ import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
 import fetch from "node-fetch";
 
-
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
   const query = searchParams.get("q");
   const category = searchParams.get("category");
   const userId = searchParams.get("userid");
+<<<<<<< Updated upstream
   
   // if search params is empty respond with error
   if (!query && !category && !userId) {
     return NextResponse.json({ message: "Search parameter is not provided." }, { status: 400 });
+=======
+  const trending = searchParams.get("trending");
+
+  // if search params is empty respond with error
+  if (!query && !category && !userId && !JSON.parse(trending)) {
+    return NextResponse.json(
+      { message: "Search parameter is not provided." },
+      { status: 400 }
+    );
+>>>>>>> Stashed changes
   }
-  
+
   // filter by query text
   if (query) {
     try {
@@ -27,12 +37,21 @@ export async function GET(req) {
         },
       });
       if (threads.length === 0) {
-        return NextResponse.json({ message: "Thread not found." }, { status: 404 });
+        return NextResponse.json(
+          { message: "Thread not found." },
+          { status: 404 }
+        );
       } else {
-        return NextResponse.json({ data: threads, message: "Get threads successful" }, { status: 200 });
+        return NextResponse.json(
+          { data: threads, message: "Get threads successful" },
+          { status: 200 }
+        );
       }
     } catch {
-      return NextResponse.json({ message: "An error occurred while fetching threads." }, { status: 500 });
+      return NextResponse.json(
+        { message: "An error occurred while fetching threads." },
+        { status: 500 }
+      );
     }
   }
 
@@ -45,13 +64,22 @@ export async function GET(req) {
         },
       });
       if (threads.length === 0) {
-        return NextResponse.json({ message: "Thread not found." }, { status: 404 });
+        return NextResponse.json(
+          { message: "Thread not found." },
+          { status: 404 }
+        );
       } else {
-        return NextResponse.json({ data: threads, message: "Get threads successful" }, { status: 200 });
+        return NextResponse.json(
+          { data: threads, message: "Get threads successful" },
+          { status: 200 }
+        );
       }
     } catch (error) {
-      console.error(error)
-      return NextResponse.json({ message: "An error occurred while fetching threads." }, { status: 500 });
+      console.error(error);
+      return NextResponse.json(
+        { message: "An error occurred while fetching threads." },
+        { status: 500 }
+      );
     }
   }
 
@@ -64,31 +92,64 @@ export async function GET(req) {
         },
       });
       if (threads.length === 0) {
-        return NextResponse.json({ message: "Thread not found." }, { status: 404 });
+        return NextResponse.json(
+          { message: "Thread not found." },
+          { status: 404 }
+        );
       } else {
-        return NextResponse.json({ data: threads, message: "Get threads successful" }, { status: 200 });
+        return NextResponse.json(
+          { data: threads, message: "Get threads successful" },
+          { status: 200 }
+        );
       }
     } catch (error) {
-      console.error(error)
-      return NextResponse.json({ message: "An error occurred while fetching threads." }, { status: 500 });
+      console.error(error);
+      return NextResponse.json(
+        { message: "An error occurred while fetching threads." },
+        { status: 500 }
+      );
     }
   }
-}
+<<<<<<< Updated upstream
+=======
 
+  // filter by trending (biggest like count descending)
+  if (JSON.parse(trending)) {
+    try {
+      const threads = await prisma.thread.findMany({
+        orderBy: {
+          like_count: "desc",
+        },
+        take: 50,
+      });
+      if (threads.length === 0) {
+        return NextResponse.json(
+          { message: "No trending threads found." },
+          { status: 404 }
+        );
+      }
+      return NextResponse.json(
+        { message: "Get trending threads successful", data: threads },
+        { status: 200 }
+      );
+    } catch {
+      return NextResponse.json(
+        { message: "An error occurred while fetching threads." },
+        { status: 500 }
+      );
+    }
+  }
+>>>>>>> Stashed changes
+}
 
 export async function POST(req) {
   // add threads
-  const formData = await req.formData();
+  const { threadUrl, category, userId } = await req.json();
 
   const id = nanoid();
 
-  const thread = formData.get("threadId");
-  const category = formData.get("category");
-  const userId = formData.get("userId");
-
-  const threadId = thread.split("/").pop();
-
-  console.log({ thread, category, userId, threadId });
+  const threadId = threadUrl.split("/").pop();
+  // console.log({ threadUrl, category, userId, threadId });
 
   try {
     // Fetch tweet data from the provided URL
@@ -96,16 +157,16 @@ export async function POST(req) {
       `${process.env.BASE_URL}/getTweet/${threadId}`
     );
     const tweetData = await response.json();
-    console.log(tweetData);
+    // console.log(tweetData);
 
     // Extract the required fields from the tweet data
-    const url = thread;
+    const url = threadUrl;
     const authorId = tweetData.tweet.user.id_str;
     const content = tweetData.tweet.text;
     const like_count = tweetData.tweet.favorite_count;
     const created_at = new Date(tweetData.tweet.created_at);
 
-    console.log({ url, authorId, content, like_count });
+    // console.log({ url, authorId, content, like_count });
 
     // Check if a thread with the same tweetId already exists
     const existingThread = await prisma.thread.findFirst({
