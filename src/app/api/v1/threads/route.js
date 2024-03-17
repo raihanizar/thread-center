@@ -8,12 +8,6 @@ export async function GET(req) {
   const query = searchParams.get("q");
   const category = searchParams.get("category");
   const userId = searchParams.get("userid");
-<<<<<<< Updated upstream
-  
-  // if search params is empty respond with error
-  if (!query && !category && !userId) {
-    return NextResponse.json({ message: "Search parameter is not provided." }, { status: 400 });
-=======
   const trending = searchParams.get("trending");
 
   // if search params is empty respond with error
@@ -22,7 +16,6 @@ export async function GET(req) {
       { message: "Search parameter is not provided." },
       { status: 400 }
     );
->>>>>>> Stashed changes
   }
 
   // filter by query text
@@ -110,8 +103,6 @@ export async function GET(req) {
       );
     }
   }
-<<<<<<< Updated upstream
-=======
 
   // filter by trending (biggest like count descending)
   if (JSON.parse(trending)) {
@@ -139,7 +130,6 @@ export async function GET(req) {
       );
     }
   }
->>>>>>> Stashed changes
 }
 
 export async function POST(req) {
