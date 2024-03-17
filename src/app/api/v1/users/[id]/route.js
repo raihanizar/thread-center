@@ -94,7 +94,7 @@ export async function PATCH(req, { params }) {
 
     // If the password or username update is successful, create JWT token
     const payload = {
-      // id: updatedUser.id,
+      id: updatedUser.id,
       email: updatedUser.email,
       username: updatedUser.username,
     };
@@ -102,7 +102,10 @@ export async function PATCH(req, { params }) {
     // Create token
     const token = sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });
     const res = NextResponse.json(
-      { message: "Change user info successful.", data: payload },
+      {
+        message: "Change user info successful.",
+        data: { email: updatedUser.email, username: updatedUser.username },
+      },
       { status: 200 }
     );
     res.cookies.set("token", token);
