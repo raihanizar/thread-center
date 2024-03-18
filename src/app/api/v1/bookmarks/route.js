@@ -1,6 +1,35 @@
 import prisma from "@/utils/prisma";
 import { NextResponse } from "next/server";
 
+export async function GET(req) {
+  const searchParams = req.nextUrl.searchParams;
+  const userId = searchParams.get("userid");
+
+  // if search params is empty respond with error
+  if (!userId) {
+    return NextResponse.json({ message: "Search parameter is not provided." }, { status: 400 });
+  }
+
+  // filter by user
+  if (userId) {
+    try {
+      const bookmarks = await prisma.bookmark.findMany({
+        where: {
+          userId: userId,
+        },
+      });
+      if (bookmarks.length === 0) {
+        return NextResponse.json({ message: "No bookmark saved by this user." }, { status: 404 });
+      } else {
+        return NextResponse.json({ data: bookmarks, message: "Get bookmarks successful" }, { status: 200 });
+      }
+    } catch (error) {
+      console.error(error)
+      return NextResponse.json({ message: "An error occurred while fetching bookmarks." }, { status: 500 });
+    }
+  }
+}
+
 export async function POST(req) {
   const { userId, threadId } = await req.json();
 
