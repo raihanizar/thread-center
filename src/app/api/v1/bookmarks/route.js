@@ -4,10 +4,31 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   const searchParams = req.nextUrl.searchParams;
   const userId = searchParams.get("userid");
+  const threadId = searchParams.get("threadid");
 
   // if search params is empty respond with error
-  if (!userId) {
+  if (!userId && !threadId) {
     return NextResponse.json({ message: "Search parameter is not provided." }, { status: 400 });
+  }
+
+  // filter by both
+  if (userId && threadId) {
+    try {
+      const bookmarks = await prisma.bookmark.findMany({
+        where: {
+          userId: userId,
+          threadId: threadId,
+        },
+      });
+      if (bookmarks.length === 0) {
+        return NextResponse.json({ message: "Bookmark not found." }, { status: 404 });
+      } else {
+        return NextResponse.json({ data: bookmarks, message: "Get bookmarks successful" }, { status: 200 });
+      }
+    } catch (error) {
+      console.error(error)
+      return NextResponse.json({ message: "An error occurred while fetching bookmarks." }, { status: 500 });
+    }
   }
 
   // filter by user
@@ -20,6 +41,25 @@ export async function GET(req) {
       });
       if (bookmarks.length === 0) {
         return NextResponse.json({ message: "No bookmark saved by this user." }, { status: 404 });
+      } else {
+        return NextResponse.json({ data: bookmarks, message: "Get bookmarks successful" }, { status: 200 });
+      }
+    } catch (error) {
+      console.error(error)
+      return NextResponse.json({ message: "An error occurred while fetching bookmarks." }, { status: 500 });
+    }
+  }
+
+  // filter by thread
+  if (threadId) {
+    try {
+      const bookmarks = await prisma.bookmark.findMany({
+        where: {
+          threadId: threadId,
+        },
+      });
+      if (bookmarks.length === 0) {
+        return NextResponse.json({ message: "This thread has not been bookmarked." }, { status: 404 });
       } else {
         return NextResponse.json({ data: bookmarks, message: "Get bookmarks successful" }, { status: 200 });
       }
