@@ -7,6 +7,43 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id        String     @id @default(cuid())
+  username  String
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  bookmark  Bookmark[]
+  thread    Thread[]
+}
+
+model Thread {
+  id          String     @id @default(cuid())
+  threadId    String
+  category    Category
+  url         String?
+  authorId    String?
+  content     String?
+  like_count  Int?
+  thread_date DateTime?
+  createdAt   DateTime   @default(now())
+  userId      String
+  bookmarks   Bookmark[]
+  user        User       @relation(fields: [userId], references: [id])
+}
+
+model Bookmark {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, threadId])
+}
+
 enum Category {
   NEWS
   POLITICS
@@ -18,44 +55,4 @@ enum Category {
   EDUCATION
   HUMOR
   HEALTH_AND_WELLNESS
-}
-
-model User {
-  id String @id @default(cuid())
-  username String
-  email String @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  thread Thread[]
-  bookmark Bookmark[]
-}
-
-model Thread {
-  id String @id @default(cuid())
-  threadId String
-  category Category
-  url String?
-  authorId String?
-  content String?
-  like_count Int?
-  thread_date DateTime?
-  createdAt DateTime @default(now())
-
-  userId String
-  user User @relation(fields: [userId], references: [id])
-  bookmarks   Bookmark[] // Many-to-many relationship between Thread and User
-}
-
-model Bookmark {
-  id          String     @id @default(cuid())
-  createdAt    DateTime   @default(now()) // timestamp when thread bookmarked
-  
-  userId      String
-  user        User       @relation(fields: [userId], references: [id]) // Each bookmark belongs to a single user
-
-  threadId    String
-  thread      Thread     @relation(fields: [threadId], references: [id]) // Each bookmark belongs to a single thread
-  @@unique([userId, threadId]) // Ensure only one bookmark per user per thread
 }
