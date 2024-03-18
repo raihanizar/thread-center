@@ -19,9 +19,12 @@ export const ExploreThreads = () => {
     "HUMOR",
     "HEALTH_AND_WELLNESS",
   ];
+  const USER_ID = "cltrdityx00009ar4p9jw9m99"
   const [isClicked, setIsClicked] = useState([true, ...Array(categories.length - 1).fill(false)]); // trending is clicked by default
   const [searchQuery, setSearchQuery] = useState("");
   const [threads, setThreads] = useState([]);
+  const [bookmarkedThreads, setBookmarkedThreads] = useState([]);
+  const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
 
   async function getTrendingThreads() {
     try {
@@ -62,10 +65,59 @@ export const ExploreThreads = () => {
     }
   }
 
+  async function bookmarkThread(threadId) {
+    try {
+      const res = await fetch("/api/v1/bookmarks", {
+        method: "POST",
+        body: JSON.stringify({
+          userId: "cltrdityx00009ar4p9jw9m99", // masih hardcode, nanti pakai JWT
+          threadId: threadId
+        })
+      })
+      const data = await res.json()
+      if (res.status === 200) {
+        setBookmarkedThreads((prev) => {
+          if (!prev.includes(threadId)) {
+            return [...prev, threadId];
+          }
+          return prevState;
+        })
+        console.log(threadId)
+        toast.success(data.message);
+      } else {
+        console.log(threadId)
+        toast.error(`${res.status} ${data.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function getBookmarksByUser(userId) {
+    try {
+      const res = await fetch(`/api/v1/bookmarks?userid=${userId}`)
+      const data = await res.json()
+      if (res.status === 200) {
+        toast.success(data.message);
+        const threadIds = data.data.map((bookmark) => bookmark.threadId);
+        setBookmarksByCurrentUser(threadIds)
+      } else {
+        toast.error(`${res.status} ${data.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   // shows trending threads by default
   useEffect(() => {
     getTrendingThreads();
   }, []);
+
+  // trigger update bookmark each time user bookmarks
+  useEffect(() => {
+    getBookmarksByUser(USER_ID);
+  }, [bookmarkedThreads]);
 
   function handleCategoryClick(categoryIndex, category) {
     setIsClicked(isClicked.map((_, index) => index === categoryIndex));
@@ -78,6 +130,10 @@ export const ExploreThreads = () => {
 
   function handleSearch(query) {
     getThreads(null, query, null);
+  }
+
+  function handleBookmark(threadId) {
+    bookmarkThread(threadId);
   }
 
   return (
@@ -103,9 +159,18 @@ export const ExploreThreads = () => {
         ))}
       </div>
       {threads?.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {threads.map((thread) => (
-            <Tweet key={thread.threadId} id={thread.threadId} />
+            <div key={thread.threadId} className="flex flex-col gap-0">
+              <Tweet id={thread.threadId} />
+              <div>
+                {bookmarksByCurrentUser.includes(thread.id) ? (
+                  <button className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded">Unbookmark Tweet</button>
+                ) : (
+                  <button className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded" onClick={() => handleBookmark(thread.id)}>Bookmark Tweet</button>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       ) : (
