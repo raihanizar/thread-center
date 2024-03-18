@@ -24,6 +24,7 @@ export const ExploreThreads = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [threads, setThreads] = useState([]);
   const [bookmarkedThreads, setBookmarkedThreads] = useState([]);
+  const [unbookmarkedThreads, setUnbookmarkedThreads] = useState([]);
   const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
 
   async function getTrendingThreads() {
@@ -65,7 +66,19 @@ export const ExploreThreads = () => {
     }
   }
 
+  async function getBookmarkByUserAndThread(userId, threadId) {
+    try {
+      const res = await fetch(`/api/v1/bookmarks?userid=${userId}&threadid=${threadId}`)
+      const data = await res.json()
+      return data
+    } catch (error) {
+      console.error(error);
+      return null
+    }
+  }
+
   async function bookmarkThread(threadId) {
+    setUnbookmarkedThreads([]) // reset unbookmark list helper
     try {
       const res = await fetch("/api/v1/bookmarks", {
         method: "POST",
@@ -80,18 +93,42 @@ export const ExploreThreads = () => {
           if (!prev.includes(threadId)) {
             return [...prev, threadId];
           }
-          return prevState;
+          return prev;
         })
-        console.log(threadId)
         toast.success(data.message);
       } else {
-        console.log(threadId)
         toast.error(`${res.status} ${data.message}`);
       }
     } catch (error) {
       console.error(error);
     }
   }
+
+  async function unbookmarkThread(threadId) {
+    setBookmarkedThreads([]) // reset bookmark list helper
+    const bookmarkData = await getBookmarkByUserAndThread(USER_ID, threadId)
+    const bookmarkId = bookmarkData.data[0].id
+    try {
+      const res = await fetch(`/api/v1/bookmarks/${bookmarkId}`, {
+        method: "DELETE",
+      })
+      const data = await res.json()
+      if (res.status === 200) {
+        setUnbookmarkedThreads((prev) => {
+          if (!prev.includes(bookmarkId)) {
+            return [...prev, bookmarkId];
+          }
+          return prev;
+        })
+        toast.success(data.message);
+      } else {
+        toast.error(`${res.status} ${data.message}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   async function getBookmarksByUser(userId) {
     try {
@@ -114,10 +151,10 @@ export const ExploreThreads = () => {
     getTrendingThreads();
   }, []);
 
-  // trigger update bookmark each time user bookmarks
+  // trigger update bookmark each time user bookmarks/unbookmarks
   useEffect(() => {
     getBookmarksByUser(USER_ID);
-  }, [bookmarkedThreads]);
+  }, [bookmarkedThreads, unbookmarkedThreads]);
 
   function handleCategoryClick(categoryIndex, category) {
     setIsClicked(isClicked.map((_, index) => index === categoryIndex));
@@ -134,6 +171,10 @@ export const ExploreThreads = () => {
 
   function handleBookmark(threadId) {
     bookmarkThread(threadId);
+  }
+
+  function handleUnbookmark(bookmarkId) {
+    unbookmarkThread(bookmarkId);
   }
 
   return (
@@ -165,7 +206,7 @@ export const ExploreThreads = () => {
               <Tweet id={thread.threadId} />
               <div>
                 {bookmarksByCurrentUser.includes(thread.id) ? (
-                  <button className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded">Unbookmark Tweet</button>
+                  <button className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded" onClick={() => handleUnbookmark(thread.id)}>Unbookmark Tweet</button>
                 ) : (
                   <button className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded" onClick={() => handleBookmark(thread.id)}>Bookmark Tweet</button>
                 )}
