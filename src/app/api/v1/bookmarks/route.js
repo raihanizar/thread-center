@@ -8,7 +8,10 @@ export async function GET(req) {
 
   // if search params is empty respond with error
   if (!userId && !threadId) {
-    return NextResponse.json({ message: "Search parameter is not provided." }, { status: 400 });
+    return NextResponse.json(
+      { message: "Search parameter is not provided." },
+      { status: 400 }
+    );
   }
 
   // filter by both
@@ -21,13 +24,22 @@ export async function GET(req) {
         },
       });
       if (bookmarks.length === 0) {
-        return NextResponse.json({ message: "Bookmark not found." }, { status: 404 });
+        return NextResponse.json(
+          { message: "Bookmark not found." },
+          { status: 404 }
+        );
       } else {
-        return NextResponse.json({ data: bookmarks, message: "Get bookmarks successful" }, { status: 200 });
+        return NextResponse.json(
+          { data: bookmarks, message: "Get bookmarks successful" },
+          { status: 200 }
+        );
       }
     } catch (error) {
-      console.error(error)
-      return NextResponse.json({ message: "An error occurred while fetching bookmarks." }, { status: 500 });
+      console.error(error);
+      return NextResponse.json(
+        { message: "An error occurred while fetching bookmarks." },
+        { status: 500 }
+      );
     }
   }
 
@@ -38,15 +50,31 @@ export async function GET(req) {
         where: {
           userId: userId,
         },
+        include: {
+          thread: {
+            select: {
+              threadId: true,
+            },
+          }, // add include related thread data for bookmark dashboard
+        },
       });
       if (bookmarks.length === 0) {
-        return NextResponse.json({ message: "No bookmark saved by this user." }, { status: 404 });
+        return NextResponse.json(
+          { message: "No bookmark saved by this user." },
+          { status: 404 }
+        );
       } else {
-        return NextResponse.json({ data: bookmarks, message: "Get bookmarks successful" }, { status: 200 });
+        return NextResponse.json(
+          { data: bookmarks, message: "Get bookmarks successful" },
+          { status: 200 }
+        );
       }
     } catch (error) {
-      console.error(error)
-      return NextResponse.json({ message: "An error occurred while fetching bookmarks." }, { status: 500 });
+      console.error(error);
+      return NextResponse.json(
+        { message: "An error occurred while fetching bookmarks." },
+        { status: 500 }
+      );
     }
   }
 
@@ -59,13 +87,22 @@ export async function GET(req) {
         },
       });
       if (bookmarks.length === 0) {
-        return NextResponse.json({ message: "This thread has not been bookmarked." }, { status: 404 });
+        return NextResponse.json(
+          { message: "This thread has not been bookmarked." },
+          { status: 404 }
+        );
       } else {
-        return NextResponse.json({ data: bookmarks, message: "Get bookmarks successful" }, { status: 200 });
+        return NextResponse.json(
+          { data: bookmarks, message: "Get bookmarks successful" },
+          { status: 200 }
+        );
       }
     } catch (error) {
-      console.error(error)
-      return NextResponse.json({ message: "An error occurred while fetching bookmarks." }, { status: 500 });
+      console.error(error);
+      return NextResponse.json(
+        { message: "An error occurred while fetching bookmarks." },
+        { status: 500 }
+      );
     }
   }
 }
