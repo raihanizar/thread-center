@@ -1,8 +1,10 @@
 "use client";
 
 import { Toaster } from "react-hot-toast";
+import { useState } from "react";
 
 export const Provider = ({ children }) => {
+  const [toastShown, setToastShown] = useState(false);
   return (
     <>
       {children}
@@ -13,6 +15,13 @@ export const Provider = ({ children }) => {
         toastOptions={{
           style: { boxShadow: "none", border: "solid 1px #E5E7EB" },
           error: { style: { backgroundColor: "red", color: "white" } },
+        }}
+        toastFn={({ message }) => {
+          // Show the toast only if it hasn't been shown before
+          if (!toastShown) {
+            setToastShown(true);
+            return message;
+          }
         }}
       />
     </>
