@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
+import { BookmarkX } from "lucide-react";
 
 export const SavedBookmarks = () => {
   const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
@@ -24,6 +25,9 @@ export const SavedBookmarks = () => {
         if (res.status === 200) {
           toast.success(data.message);
           setBookmarksByCurrentUser(data.data);
+
+          // Cache threads data in localStorage
+          localStorage.setItem("bookmarks", JSON.stringify(data.data));
         } else {
           toast.error(`${res.status} ${data.message}`);
         }
@@ -85,24 +89,30 @@ export const SavedBookmarks = () => {
 
   return (
     <main className="flex flex-col gap-8 p-8 md:p-20 justify-center items-center min-h-dvh">
-      <h1 className="text-3xl font-bold">Saved Threads</h1>
       {bookmarksByCurrentUser?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {bookmarksByCurrentUser.map((bookmark) => (
             <div key={bookmark.thread.threadId} className="flex flex-col gap-0">
-              <Tweet id={bookmark.thread.threadId} />
               <div>
                 {bookmarksByCurrentUser.includes(bookmark.threadId) ? (
                   <span></span>
                 ) : (
-                  <button
-                    className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded"
-                    onClick={() => handleUnbookmark(bookmark.threadId)}
-                  >
-                    Unbookmark Tweet
-                  </button>
+                  <div className="flex items-center absolute lg:bottom-36 md:bottom-0 sm:bottom-5 xl:-bottom-16 -bottom-16 gap-1">
+                    <div
+                      className=" object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-top"
+                      data-tip="delete bookmark"
+                    >
+                      <BookmarkX
+                        onClick={() => handleUnbookmark(bookmark.threadId)}
+                      />
+                    </div>
+                    <div className=" border rounded-md p-0.5 bg-gray-100 text-xs my-0">
+                      {bookmark.thread.category} category belum muncul
+                    </div>
+                  </div>
                 )}
               </div>
+              <Tweet id={bookmark.thread.threadId} />
             </div>
           ))}
         </div>
