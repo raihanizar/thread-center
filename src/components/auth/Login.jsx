@@ -79,7 +79,7 @@ export const Login = () => {
               <div className="flex flex-col space-y-2 relative">
                 <div className="flex justify-between">
                   <label htmlFor="password">Password</label>
-                  <Link className="text-sm underline" href="#">
+                  <Link className="text-sm underline" href="/resetpassword">
                     Forgot your password?
                   </Link>
                 </div>
