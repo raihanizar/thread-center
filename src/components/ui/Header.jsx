@@ -23,7 +23,12 @@ export function Header({ userData }) {
         </div>
       </div>
       <div className="flex flex-row items-center">
-        <h1 className="text-xl font-bold underline">{userData?.username}</h1>
+        <div className="flex flex-row items-center">
+          {userData ? (
+            <h1 className="text-xl font-bold underline">{userData?.username}</h1>)
+            : (<Link className="bg-blue-500 text-white hover:bg-blue-600 p-2 rounded" href={"/login"}>Login</Link>)
+          }
+        </div>
       </div>
     </div>
   )
