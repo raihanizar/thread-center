@@ -1,6 +1,6 @@
 "use client";
 
-import { Dashboard } from "@/components/dashboard/Dashboard";
+import { Profile } from "@/components/Profile";
 import { Header } from "@/components/ui/Header";
 import React, { useEffect, useState } from "react";
 
@@ -14,10 +14,10 @@ export default function Page() {
   }, []);
 
   return (
-    <>
+    <div className="flex flex-col h-dvh">
       <Header userData={userData} />
-      <Dashboard userData={userData} />
-    </>
+      <Profile userData={userData} />
+    </div>
   )
 }
 

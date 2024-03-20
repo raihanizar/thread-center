@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { CreatedThreads } from "@/components/dashboard/CreatedBookmark";
 import { SavedBookmarks } from "@/components/dashboard/SavedBookmark";
+import Link from "next/link";
 
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState("created");
@@ -31,7 +32,7 @@ export function Dashboard() {
       {/* Buttons (Share and Edit Profile) */}
       <div className="flex justify-center mt-4 items-center space-x-2">
         <button className="btn btn-primary text-white">Share</button>
-        <button className="btn btn-primary text-white">Edit Profile</button>
+        <Link className="btn btn-primary text-white" href="/profile">Edit Profile</Link>
       </div>
 
       {/* Tabs (Created and Saved) */}
