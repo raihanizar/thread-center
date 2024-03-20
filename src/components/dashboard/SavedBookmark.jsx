@@ -88,7 +88,7 @@ export const SavedBookmarks = () => {
   };
 
   return (
-    <main className="flex flex-col gap-8 p-8 md:p-20 justify-center items-center min-h-dvh">
+    <main className="flex flex-col gap-8 px-8 md:px-20 justify-center items-center min-h-dvh">
       {bookmarksByCurrentUser?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {bookmarksByCurrentUser.map((bookmark) => (
@@ -97,9 +97,9 @@ export const SavedBookmarks = () => {
                 {bookmarksByCurrentUser.includes(bookmark.threadId) ? (
                   <span></span>
                 ) : (
-                  <div className="flex items-center absolute lg:bottom-36 md:bottom-0 sm:bottom-5 xl:-bottom-16 -bottom-16 gap-1">
+                  <div className="flex items-center absolute">
                     <div
-                      className=" object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-top"
+                      className=" object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
                       data-tip="delete bookmark"
                     >
                       <BookmarkX
@@ -112,7 +112,9 @@ export const SavedBookmarks = () => {
                   </div>
                 )}
               </div>
-              <Tweet id={bookmark.thread.threadId} />
+              <span className="mt-1">
+                <Tweet id={bookmark.thread.threadId} />
+              </span>
             </div>
           ))}
         </div>

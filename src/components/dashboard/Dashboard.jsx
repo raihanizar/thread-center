@@ -101,7 +101,7 @@ export function Dashboard({ userData }) {
         </button>
       </section>
       {/* Content based on active tab */}
-      <div className="mt-8">
+      <div className="mt-4">
         {activeTab === "created" && <CreatedThreads reload={reloadThreads} />}
         {activeTab === "saved" && <SavedBookmarks reload={reloadBookmarks} />}
       </div>

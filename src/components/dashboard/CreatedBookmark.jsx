@@ -37,17 +37,19 @@ export const CreatedThreads = () => {
   }, []);
 
   return (
-    <main className="flex flex-col gap-8 p-4 md:p-20 justify-center items-center min-h-dvh">
+    <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center min-h-dvh">
       {threads?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {threads.map((thread) => (
             <div key={thread.threadId} className="flex flex-col gap-0">
-              <div className="flex items-center absolute lg:bottom-36 md:bottom-0 sm:bottom-5 xl:-bottom-16 -bottom-16">
+              <div className="flex items-center absolute">
                 <div className=" border rounded-md p-0.5 bg-gray-100 text-xs my-0">
                   {thread.category}
                 </div>
               </div>
-              <Tweet id={thread.threadId} />
+              <div className="mt-2">
+                <Tweet id={thread.threadId} />
+              </div>
             </div>
           ))}
         </div>
