@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-export const CreateThreads = () => {
+export const CreateThreads = ({userData}) => {
   const [threadUrl, setThreadId] = useState("");
   const [category, setCategory] = useState("");
 
@@ -33,8 +33,8 @@ export const CreateThreads = () => {
       return;
     }
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user.id;
+    // const user = JSON.parse(localStorage.getItem("user"));
+    const userId = userData.id;
 
     // formData.append("userId", userId);
 
@@ -52,7 +52,6 @@ export const CreateThreads = () => {
 
     const data = await res.json();
     toast.success("Create thread success!");
-    console.log(data);
   }
 
   return (

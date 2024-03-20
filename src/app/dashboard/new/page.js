@@ -1,6 +1,22 @@
+"use client"
+
 import { CreateThreads } from "@/components/CreateThreads";
-import React from "react";
+import { Header } from "@/components/ui/Header";
+import React, { useEffect, useState } from "react";
 
 export default function page() {
-  return <CreateThreads />;
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const userDataStr = localStorage.getItem("user");
+    const userDataJson = JSON.parse(userDataStr);
+    setUserData(userDataJson);
+  }, []);
+
+  return (
+    <>
+      <Header userData={userData} />
+      <CreateThreads userData={userData} />
+    </>
+  )
 }

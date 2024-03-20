@@ -5,7 +5,7 @@ import { CategoryBtn } from "./CategoryBtn";
 import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
 
-export const ExploreThreads = () => {
+export const ExploreThreads = ({ userData }) => {
   const categories = [
     "TRENDING",
     "NEWS",
@@ -19,7 +19,7 @@ export const ExploreThreads = () => {
     "HUMOR",
     "HEALTH_AND_WELLNESS",
   ];
-  const [userData, setUserData] = useState({})
+  // const [userData, setUserData] = useState({})
   const [isClicked, setIsClicked] = useState([true, ...Array(categories.length - 1).fill(false)]); // trending is clicked by default
   const [searchQuery, setSearchQuery] = useState("");
   const [threads, setThreads] = useState([]);
@@ -77,11 +77,11 @@ export const ExploreThreads = () => {
     }
   }
 
-  function getUserData() {
-    const userData = localStorage.getItem("user");
-    const userDataJson = JSON.parse(userData);
-    setUserData(userDataJson);
-  }
+  // function getUserData() {
+  //   const userData = localStorage.getItem("user");
+  //   const userDataJson = JSON.parse(userData);
+  //   setUserData(userDataJson);
+  // }
 
   async function bookmarkThread(threadId) {
     setUnbookmarkedThreads([]) // reset unbookmark list helper
@@ -89,7 +89,7 @@ export const ExploreThreads = () => {
       const res = await fetch("/api/v1/bookmarks", {
         method: "POST",
         body: JSON.stringify({
-          userId: userData.id,
+          userId: userData?.id,
           threadId: threadId
         })
       })
@@ -112,7 +112,7 @@ export const ExploreThreads = () => {
 
   async function unbookmarkThread(threadId) {
     setBookmarkedThreads([]) // reset bookmark list helper
-    const bookmarkData = await getBookmarkByUserAndThread(userData.id, threadId)
+    const bookmarkData = await getBookmarkByUserAndThread(userData?.id, threadId)
     const bookmarkId = bookmarkData.data[0].id
     try {
       const res = await fetch(`/api/v1/bookmarks/${bookmarkId}`, {
@@ -156,13 +156,13 @@ export const ExploreThreads = () => {
 
   // initialization
   useEffect(() => {
-    getUserData();
+    // getUserData();
     getTrendingThreads();
   }, []);
 
   // trigger update bookmark each time user bookmarks/unbookmarks
   useEffect(() => {
-    getBookmarksByUser(userData.id);
+    getBookmarksByUser(userData?.id);
   }, [bookmarkedThreads, unbookmarkedThreads]);
 
   function handleCategoryClick(categoryIndex, category) {
