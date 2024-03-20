@@ -22,10 +22,8 @@ export const Register = () => {
 
   async function handleRegister() {
     const { username, email, password } = registerData;
-    console.log({ username, email, password });
 
     if (!username || !email || !password) {
-      console.log("all fields must be filed");
       toast.error("all fields must be filed");
       return;
     }
@@ -33,7 +31,6 @@ export const Register = () => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!emailPattern.test(email)) {
-      // console.log("Invalid email format");
       toast.error("Invalid email format");
       return;
     }
@@ -45,7 +42,6 @@ export const Register = () => {
 
     if (res.status === 400 || res.status === 401) {
       const { message } = await res.json();
-      console.log(message);
       toast.error(message);
       return;
     }
@@ -54,7 +50,6 @@ export const Register = () => {
     toast.success(message);
     // window.location.replace("/login");
     router.push("/login");
-    console.log({ data, message });
   }
 
   return (
@@ -116,7 +111,7 @@ export const Register = () => {
                 />
               </div>
               <button
-                className="w-full btn btn-primary"
+                className="w-full btn bg-blue-500 hover:bg-blue-600 text-white"
                 type="submit"
                 onClick={handleRegister}
               >

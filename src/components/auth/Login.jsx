@@ -40,7 +40,6 @@ export const Login = () => {
 
     if (res.status === 401) {
       const { errorMessage } = await res.json();
-      console.log(errorMessage);
       toast.error(errorMessage);
       return;
     }
@@ -102,14 +101,11 @@ export const Login = () => {
                 </div>
               </div>
               <button
-                className="w-full btn btn-active"
+                className="w-full btn btn-active bg-blue-500 hover:bg-blue-600 text-white"
                 type="submit"
                 onClick={handleLogin}
               >
                 Login
-              </button>
-              <button className="w-full btn btn-active" variant="outline">
-                Login with Twitter
               </button>
             </div>
             <div className="mt-4 text-center text-sm">
