@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import { CategoryBtn } from "./CategoryBtn";
 import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export const ExploreThreads = ({ userData }) => {
   const categories = [
@@ -20,19 +22,24 @@ export const ExploreThreads = ({ userData }) => {
     "HEALTH_AND_WELLNESS",
   ];
   // const [userData, setUserData] = useState({})
-  const [isClicked, setIsClicked] = useState([true, ...Array(categories.length - 1).fill(false)]); // trending is clicked by default
+  const [isClicked, setIsClicked] = useState([
+    true,
+    ...Array(categories.length - 1).fill(false),
+  ]); // trending is clicked by default
   const [searchQuery, setSearchQuery] = useState("");
   const [threads, setThreads] = useState([]);
   const [bookmarkedThreads, setBookmarkedThreads] = useState([]);
   const [unbookmarkedThreads, setUnbookmarkedThreads] = useState([]);
   const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
+  const [tokenExists, setTokenExists] = useState(false);
+  const router = useRouter();
 
   async function getTrendingThreads() {
     try {
-      const res = await fetch("/api/v1/threads?trending=true")
-      const data = await res.json()
+      const res = await fetch("/api/v1/threads?trending=true");
+      const data = await res.json();
       toast.success(data.message);
-      setThreads(data.data)
+      setThreads(data.data);
     } catch (error) {
       console.error(error);
       toast.error(`${data.status} ${data.message}`);
@@ -40,21 +47,21 @@ export const ExploreThreads = ({ userData }) => {
   }
 
   async function getThreads(category = null, query = null, user = null) {
-    setThreads([]) // reset thread upon click
+    setThreads([]); // reset thread upon click
     let fetchParams = "";
     if (category) {
-      fetchParams = `?category=${category}`
+      fetchParams = `?category=${category}`;
     }
     if (query) {
-      fetchParams = `?q=${query}`
+      fetchParams = `?q=${query}`;
     }
     if (user) {
-      fetchParams = `?userid=${user}`
+      fetchParams = `?userid=${user}`;
     }
     const fetchUrl = `/api/v1/threads${fetchParams}`;
     try {
-      const res = await fetch(fetchUrl)
-      const data = await res.json()
+      const res = await fetch(fetchUrl);
+      const data = await res.json();
       if (res.status === 200) {
         toast.success(data.message);
         setThreads(data.data);
@@ -68,12 +75,14 @@ export const ExploreThreads = ({ userData }) => {
 
   async function getBookmarkByUserAndThread(userId, threadId) {
     try {
-      const res = await fetch(`/api/v1/bookmarks?userid=${userId}&threadid=${threadId}`)
-      const data = await res.json()
-      return data
+      const res = await fetch(
+        `/api/v1/bookmarks?userid=${userId}&threadid=${threadId}`
+      );
+      const data = await res.json();
+      return data;
     } catch (error) {
       console.error(error);
-      return null
+      return null;
     }
   }
 
@@ -84,23 +93,23 @@ export const ExploreThreads = ({ userData }) => {
   // }
 
   async function bookmarkThread(threadId) {
-    setUnbookmarkedThreads([]) // reset unbookmark list helper
+    setUnbookmarkedThreads([]); // reset unbookmark list helper
     try {
       const res = await fetch("/api/v1/bookmarks", {
         method: "POST",
         body: JSON.stringify({
           userId: userData?.id,
-          threadId: threadId
-        })
-      })
-      const data = await res.json()
+          threadId: threadId,
+        }),
+      });
+      const data = await res.json();
       if (res.status === 200) {
         setBookmarkedThreads((prev) => {
           if (!prev.includes(threadId)) {
             return [...prev, threadId];
           }
           return prev;
-        })
+        });
         toast.success(data.message);
       } else {
         toast.error(`${res.status} ${data.message}`);
@@ -111,21 +120,24 @@ export const ExploreThreads = ({ userData }) => {
   }
 
   async function unbookmarkThread(threadId) {
-    setBookmarkedThreads([]) // reset bookmark list helper
-    const bookmarkData = await getBookmarkByUserAndThread(userData?.id, threadId)
-    const bookmarkId = bookmarkData.data[0].id
+    setBookmarkedThreads([]); // reset bookmark list helper
+    const bookmarkData = await getBookmarkByUserAndThread(
+      userData?.id,
+      threadId
+    );
+    const bookmarkId = bookmarkData.data[0].id;
     try {
       const res = await fetch(`/api/v1/bookmarks/${bookmarkId}`, {
         method: "DELETE",
-      })
-      const data = await res.json()
+      });
+      const data = await res.json();
       if (res.status === 200) {
         setUnbookmarkedThreads((prev) => {
           if (!prev.includes(bookmarkId)) {
             return [...prev, bookmarkId];
           }
           return prev;
-        })
+        });
         toast.success(data.message);
       } else {
         toast.error(`${res.status} ${data.message}`);
@@ -135,11 +147,10 @@ export const ExploreThreads = ({ userData }) => {
     }
   }
 
-
   async function getBookmarksByUser(userId) {
     try {
-      const res = await fetch(`/api/v1/bookmarks?userid=${userId}`)
-      const data = await res.json()
+      const res = await fetch(`/api/v1/bookmarks?userid=${userId}`);
+      const data = await res.json();
       if (res.status === 200) {
         toast.success(data.message);
         const threadIds = data.data.map((bookmark) => bookmark.threadId);
@@ -156,6 +167,11 @@ export const ExploreThreads = ({ userData }) => {
 
   // initialization
   useEffect(() => {
+    // Check if token exists in cookies
+    const token = Cookies.get("token");
+    setTokenExists(!!token); // Update state based on the presence of the token
+
+    // Fetch trending threads
     // getUserData();
     getTrendingThreads();
   }, []);
@@ -179,6 +195,13 @@ export const ExploreThreads = ({ userData }) => {
   }
 
   function handleBookmark(threadId) {
+    // Check if token exists before allowing bookmark
+    if (!tokenExists) {
+      toast.error("You must be logged in to bookmark a thread.");
+      // Redirect to the login page
+      router.push("/login");
+      return;
+    }
     bookmarkThread(threadId);
   }
 
@@ -201,11 +224,22 @@ export const ExploreThreads = ({ userData }) => {
             }
           }}
         ></input>
-        <button className="bg-slate-800 text-white p-4 rounded-full" onClick={() => handleSearch(searchQuery)}>Go</button>
+        <button
+          className="bg-slate-800 text-white p-4 rounded-full"
+          onClick={() => handleSearch(searchQuery)}
+        >
+          Go
+        </button>
       </div>
       <div className="flex flex-row flex-wrap justify-center items-center gap-2 w-full max-w-screen-md">
         {categories.map((category, index) => (
-          <CategoryBtn key={index} isTrending={index === 0} onClick={() => handleCategoryClick(index, category)} isClicked={isClicked[index]} categoryName={category} />
+          <CategoryBtn
+            key={index}
+            isTrending={index === 0}
+            onClick={() => handleCategoryClick(index, category)}
+            isClicked={isClicked[index]}
+            categoryName={category}
+          />
         ))}
       </div>
       {threads?.length > 0 ? (
@@ -215,9 +249,19 @@ export const ExploreThreads = ({ userData }) => {
               <Tweet id={thread.threadId} />
               <div>
                 {bookmarksByCurrentUser.includes(thread.id) ? (
-                  <button className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded" onClick={() => handleUnbookmark(thread.id)}>Unbookmark Tweet</button>
+                  <button
+                    className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded"
+                    onClick={() => handleUnbookmark(thread.id)}
+                  >
+                    Unbookmark Tweet
+                  </button>
                 ) : (
-                  <button className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded" onClick={() => handleBookmark(thread.id)}>Bookmark Tweet</button>
+                  <button
+                    className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded"
+                    onClick={() => handleBookmark(thread.id)}
+                  >
+                    Bookmark Tweet
+                  </button>
                 )}
               </div>
             </div>
@@ -229,5 +273,5 @@ export const ExploreThreads = ({ userData }) => {
         </div>
       )}
     </main>
-  )
-}
+  );
+};

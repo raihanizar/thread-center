@@ -126,6 +126,23 @@ export async function POST(req) {
   }
 
   try {
+    // Check if the thread belongs to the user trying to bookmark it
+    const thread = await prisma.thread.findUnique({
+      where: {
+        id: threadId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+
+    // return an error indicating that the user cannot bookmark their own thread
+    if (!thread || thread.userId === userId) {
+      return NextResponse.json(
+        { message: "You cannot bookmark your own thread." },
+        { status: 400 }
+      );
+    }
     // Check if there is already a bookmark for the given userId and threadId
     const existingBookmark = await prisma.bookmark.findFirst({
       where: {
