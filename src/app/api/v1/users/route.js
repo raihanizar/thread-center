@@ -4,7 +4,6 @@ import prisma from "@/utils/prisma";
 
 export async function PATCH(req) {
   const { email, newPassword } = await req.json();
-  console.log({ email, newPassword });
 
   // Find the user by email
   const existingUser = await prisma.user.findFirst({

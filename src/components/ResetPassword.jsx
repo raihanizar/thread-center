@@ -1,31 +1,34 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export const ResetPassword = () => {
-  const [userInfo, setUserInfo] = useState({
+  const [resetPassword, setResetPassword] = useState({
     email: "",
     newPassword: "",
     confirmPassword: "",
     passwordMatchError: "",
   });
 
+  const router = useRouter();
+
   // Function to handle input change
   function handleChangeInput(event) {
     const { name, value } = event.target;
 
     // Check if confirmed password matches the new password
-    if (name === "confirmPassword" && value !== userInfo.newPassword) {
-      setUserInfo({
-        ...userInfo,
+    if (name === "confirmPassword" && value !== resetPassword.newPassword) {
+      setResetPassword({
+        ...resetPassword,
         passwordMatchError:
           "Confirmed password does not match the new password",
         [name]: value,
       });
     } else {
-      setUserInfo({
-        ...userInfo,
+      setResetPassword({
+        ...resetPassword,
         passwordMatchError: "", // Reset the error message
         [name]: value,
       });
@@ -33,10 +36,10 @@ export const ResetPassword = () => {
   }
 
   // Function to handle login
-  async function handleChangeUserInfo(event) {
+  async function handleResetPassword(event) {
     event.preventDefault();
 
-    const { newPassword, confirmPassword } = userInfo;
+    const { newPassword, confirmPassword } = resetPassword;
 
     // Check if confirmPassword is empty
     if (!newPassword || !confirmPassword) {
@@ -51,7 +54,7 @@ export const ResetPassword = () => {
 
     const res = await fetch(`/api/v1/users/`, {
       method: "PATCH",
-      body: JSON.stringify(userInfo),
+      body: JSON.stringify(resetPassword),
     });
 
     if (res.status === 500 || res.status === 404) {
@@ -59,8 +62,9 @@ export const ResetPassword = () => {
       toast.error(message);
       return;
     }
-    const { data, message } = await res.json();
+    const { message } = await res.json();
     toast.success(message);
+    router.push("/login");
   }
 
   return (
@@ -97,12 +101,14 @@ export const ResetPassword = () => {
             required
             onChange={handleChangeInput}
           />
-          <p className="text-red-500 text-sm">{userInfo.passwordMatchError}</p>
+          <p className="text-red-500 text-sm">
+            {resetPassword.passwordMatchError}
+          </p>
         </div>
 
         <button
           className="btn btn-primary bg-blue-500 hover:bg-blue-600"
-          onClick={handleChangeUserInfo}
+          onClick={handleResetPassword}
         >
           Update Password
         </button>
