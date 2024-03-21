@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
+import { BookmarkX } from "lucide-react";
 
 export const CreatedThreads = () => {
   const [threads, setThreads] = useState([]);
@@ -42,13 +43,27 @@ export const CreatedThreads = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {threads.map((thread) => (
             <div key={thread.threadId} className="flex flex-col gap-0">
-              <div className="flex items-center absolute">
-                <div className=" border rounded-md p-0.5 bg-gray-100 text-xs my-0">
-                  {thread.category}
-                </div>
-              </div>
-              <div className="mt-2">
+              <span className="-mb-5">
                 <Tweet id={thread.threadId} />
+              </span>
+              <div>
+                {threads.includes(thread.threadId) ? (
+                  <span></span>
+                ) : (
+                  <div className="flex items-center absolute gap-1">
+                    <div
+                      className="hover:cursor-pointer object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
+                      data-tip="delete bookmark"
+                    >
+                      <BookmarkX
+                        onClick={() => handleUnbookmark(thread.threadId)}
+                      />
+                    </div>
+                    <div className=" border rounded-md p-0.5 bg-gray-100 text-xs my-0">
+                      {thread.category}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
