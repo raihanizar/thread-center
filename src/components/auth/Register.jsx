@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { Eye, EyeOff } from "lucide-react";
 
 export const Register = () => {
   const router = useRouter();
@@ -12,6 +13,13 @@ export const Register = () => {
     email: "",
     password: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  // ngintip password
+  function togglePasswordVisibility() {
+    setShowPassword(!showPassword);
+  }
 
   function handleChangeInput(event) {
     setRegisterData({
@@ -53,27 +61,14 @@ export const Register = () => {
   }
 
   return (
-    <main className="space-y-4">
-      <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] bg-twitter">
-        <div className="hidden lg:block dark:bg-gray-800">
-          <img
-            alt="Image"
-            className="h-full w-full object-cover"
-            height="1080"
-            src="https://t4.ftcdn.net/jpg/01/19/11/55/360_F_119115529_mEnw3lGpLdlDkfLgRcVSbFRuVl6sMDty.jpg"
-            style={{
-              aspectRatio: "1920/1080",
-              objectFit: "cover",
-            }}
-            width="1920"
-          />
-        </div>
-        <div className="flex items-center justify-center py-12">
+    <main className="bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
+        <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg px-10 py-8 max-w-md">
           <div className="mx-auto w-[350px] space-y-6">
             <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold">Register</h1>
+              <h1 className="text-3xl font-semibold">Register</h1>
               <p className="text-gray-500 dark:text-gray-400">
-                Enter your details to create an account
+                Let's post your first thread
               </p>
             </div>
             <div className="space-y-4">
@@ -99,16 +94,24 @@ export const Register = () => {
                   className="input input-primary w-full"
                 />
               </div>
-              <div className="flex flex-col space-y-2">
+              <div className="space-y-2">
                 <label htmlFor="password">Password</label>
-                <input
-                  name="password"
-                  type="password"
-                  placeholder="password"
-                  onChange={handleChangeInput}
-                  required
-                  className="input input-primary w-full"
-                />
+                <div className="relative ">
+                  <input
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="password"
+                    onChange={handleChangeInput}
+                    required
+                    className="input input-primary w-full"
+                  />
+                  <div
+                    className="absolute inset-y-0 right-0 flex cursor-pointer items-center mr-2"
+                    onClick={togglePasswordVisibility}
+                  >
+                    {showPassword ? <Eye size={24} /> : <EyeOff size={24} />}
+                  </div>
+                </div>
               </div>
               <button
                 className="w-full btn bg-blue-500 hover:bg-blue-600 text-white"
@@ -119,8 +122,11 @@ export const Register = () => {
               </button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Already have an account?
-              <Link className="underline" href="/login">
+              Already have an account?&nbsp;
+              <Link
+                className="underline hover:btn hover:btn-xs hover:btn-info hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                href="/login"
+              >
                 Login
               </Link>
             </div>

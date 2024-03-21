@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
-export const CreateThreads = ({userData}) => {
+export const CreateThreads = ({ userData }) => {
   const [threadUrl, setThreadId] = useState("");
   const [category, setCategory] = useState("");
 
@@ -52,27 +52,29 @@ export const CreateThreads = ({userData}) => {
 
     const data = await res.json();
     toast.success("Create thread success!");
+    window.location.replace("/dashboard");
   }
 
   return (
-    <main className="bg-gray-100 p-6 flex flex-col items-center">
-      <div className="text-xl font-bold mb-4">Create Threads</div>
-
-      <section className="mb-4 w-full max-w-md">
-        <div className="mb-2">
-          <label className="block mb-1 text-gray-700">Add link here</label>
-          <input
+    <main className="grow flex flex-col gap-8 p-8 md:p-20 justify-center items-center">
+      <h1 className="text-2xl font-semibold">Create New Thread</h1>
+      <div className="flex flex-col gap-6 p-6 border border-slate-900 rounded-xl">
+        <div className="flex flex-col gap-2">
+          <label className="block text-base text-gray-700">Add link here</label>
+          <textarea
             name="threadUrl"
             placeholder="example: twitter.com/sosmedkeras/status/1766114939583017046"
             onChange={handleUrlInput}
-            className="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+            className="textarea textarea-info h-40 w-full border rounded-md px-4 focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div className="flex flex-col mb-2">
-          <label className="block mb-1 text-gray-700">Thread category</label>
+        <div className="flex flex-col">
+          <label className="block text-base text-gray-700">
+            Thread category
+          </label>
           <select
             name="category"
-            className="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"
+            className="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500 text-sm"
             onChange={handleCategoryChange}
           >
             <option value="NEWS">News</option>
@@ -87,13 +89,13 @@ export const CreateThreads = ({userData}) => {
             <option value="HEALTH_AND_WELLNESS">Health and Wellness</option>
           </select>
         </div>
-      </section>
-      <button
-        onClick={handleSubmitThread}
-        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-      >
-        Submit Product
-      </button>
+        <button
+          onClick={handleSubmitThread}
+          className="btn btn-sm w-fit bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded"
+        >
+          Post Thread
+        </button>
+      </div>
     </main>
   );
 };
