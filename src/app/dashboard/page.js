@@ -14,10 +14,9 @@ export default function Page() {
   }, []);
 
   return (
-    <>
+    <main>
       <Header userData={userData} />
       <Dashboard userData={userData} />
-    </>
-  )
+    </main>
+  );
 }
-
