@@ -40,12 +40,12 @@ export async function GET(req, { params }) {
 
 export async function PATCH(req, { params }) {
   const id = params.id;
-  const { newPassword, newUsername } = await req.json();
-  // console.log({ email, id });
+  const { newUsername, newEmail } = await req.json();
+  console.log({ newEmail, newUsername, id });
 
-  // find existing user
   try {
-    const findUser = await prisma.user.findUnique({
+    // Find existing user
+    const findUser = await prisma.user.findFirst({
       where: {
         id,
       },
@@ -59,21 +59,7 @@ export async function PATCH(req, { params }) {
       );
     }
 
-    // Update the user's password if newPassword is provided
-    if (newPassword) {
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-      await prisma.user.update({
-        where: {
-          id,
-        },
-        data: {
-          password: hashedPassword,
-        },
-      });
-    }
-
-    // Update the user's username if newUsername is provided
+    // Update user's username if newUsername is provided
     if (newUsername) {
       await prisma.user.update({
         where: {
@@ -85,32 +71,33 @@ export async function PATCH(req, { params }) {
       });
     }
 
-    // Fetch the updated user after updating username or password
+    // Update user's email if newEmail is provided
+    if (newEmail) {
+      await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          email: newEmail,
+        },
+      });
+    }
+
+    // Fetch the updated user after updating username or email
     const updatedUser = await prisma.user.findFirst({
       where: {
         id,
       },
     });
 
-    // If the password or username update is successful, create JWT token
-    const payload = {
-      id: updatedUser.id,
-      email: updatedUser.email,
-      username: updatedUser.username,
-    };
-
-    // Create token
-    const token = sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });
-    const res = NextResponse.json(
+    // Return success response with updated user data
+    return NextResponse.json(
       {
         message: "Change user info successful.",
-        data: { email: updatedUser.email, username: updatedUser.username },
+        data: updatedUser,
       },
       { status: 200 }
     );
-    res.cookies.set("token", token);
-
-    return res;
   } catch (error) {
     console.log(error);
     return NextResponse.error(error.message || "Internal Server Error", {
