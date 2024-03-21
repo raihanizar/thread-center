@@ -54,6 +54,7 @@ export async function GET(req) {
           thread: {
             select: {
               threadId: true,
+              category: true,
             },
           }, // add include related thread data for bookmark dashboard
         },

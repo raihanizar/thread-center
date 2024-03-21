@@ -23,13 +23,13 @@ export const SavedBookmarks = () => {
         const res = await fetch(fetchUrl);
         const data = await res.json();
         if (res.status === 200) {
-          toast.success(data.message);
+          console.log(data.message);
           setBookmarksByCurrentUser(data.data);
 
           // Cache threads data in localStorage
           localStorage.setItem("bookmarks", JSON.stringify(data.data));
         } else {
-          toast.error(`${res.status} ${data.message}`);
+          console.error(`${res.status} ${data.message}`);
         }
       } catch (error) {
         console.error(error);
@@ -75,12 +75,12 @@ export const SavedBookmarks = () => {
           setBookmarksByCurrentUser((prevBookmarks) =>
             prevBookmarks.filter((bookmark) => bookmark.threadId !== threadId)
           );
-          toast.success(deleteData.message);
+          console.log(deleteData.message);
         } else {
-          toast.error(`${deleteRes.status} ${deleteData.message}`);
+          console.error(`${deleteRes.status} ${deleteData.message}`);
         }
       } else {
-        toast.error(`${res.status} ${data.message}`);
+        console.error(`${res.status} ${data.message}`);
       }
     } catch (error) {
       console.error(error);
@@ -90,27 +90,27 @@ export const SavedBookmarks = () => {
   return (
     <main className="flex flex-col gap-8 px-8 md:px-20 justify-center items-center min-h-dvh">
       {bookmarksByCurrentUser?.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="sm:columns-3 gap-5 w-[1200px] mx-auto columns-2 mb-10">
           {bookmarksByCurrentUser.map((bookmark) => (
-            <div key={bookmark.thread.threadId} className="flex flex-col gap-0">
-              <span className="-mb-5">
+            <div key={bookmark.thread.threadId} className="gap-0 inline-block">
+              <span className="p-0">
                 <Tweet id={bookmark.thread.threadId} />
               </span>
-              <div>
+              <div className="font-semibold -mt-5">
                 {bookmarksByCurrentUser.includes(bookmark.threadId) ? (
                   <span></span>
                 ) : (
-                  <div className="flex items-center absolute gap-1">
+                  <div className="flex items-center gap-1">
                     <div
-                      className="hover:cursor-pointer object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
+                      className=" hover:cursor-pointer object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
                       data-tip="delete bookmark"
                     >
                       <BookmarkX
                         onClick={() => handleUnbookmark(bookmark.threadId)}
                       />
                     </div>
-                    <div className=" border rounded-md p-0.5 bg-gray-100 text-xs my-0">
-                      {bookmark.thread.category} category belum muncul
+                    <div className="badge badge-outline text-xs my-0">
+                      {bookmark.thread.category}
                     </div>
                   </div>
                 )}
