@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
+import { BookmarkX } from "lucide-react";
 
 export const CreatedThreads = () => {
   const [threads, setThreads] = useState([]);
@@ -21,12 +22,12 @@ export const CreatedThreads = () => {
         const res = await fetch(fetchUrl);
         const data = await res.json();
         if (res.status === 200) {
-          toast.success(data.message);
+          console.log(data.message);
           setThreads(data.data);
           // Cache threads data in localStorage
           localStorage.setItem("threads", JSON.stringify(data.data));
         } else {
-          toast.error(`${res.status} ${data.message}`);
+          console.error(`${res.status} ${data.message}`);
         }
       } catch (error) {
         console.error(error);
@@ -39,16 +40,22 @@ export const CreatedThreads = () => {
   return (
     <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center min-h-dvh">
       {threads?.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="sm:columns-3 gap-5 w-[1200px] mx-auto columns-2 mb-10">
           {threads.map((thread) => (
-            <div key={thread.threadId} className="flex flex-col gap-0">
-              <div className="flex items-center absolute">
-                <div className=" border rounded-md p-0.5 bg-gray-100 text-xs my-0">
-                  {thread.category}
-                </div>
-              </div>
-              <div className="mt-2">
+            <div key={thread.threadId} className="gap-0 inline-block">
+              <span className="p-0">
                 <Tweet id={thread.threadId} />
+              </span>
+              <div className="font-semibold -mt-5">
+                {threads.includes(thread.threadId) ? (
+                  <span></span>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <div className="badge badge-outline text-xs my-0">
+                      {thread.category}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
