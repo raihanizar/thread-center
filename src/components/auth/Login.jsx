@@ -52,82 +52,72 @@ export const Login = () => {
   }
 
   return (
-    <main className="space-y-6">
-      {/* // login baru */}
-      <div className="w-full lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px] bg-slate-50">
-        <div className="flex items-center justify-center py-12">
-          <div className="mx-auto w-[350px] space-y-6">
-            <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold">Login</h1>
-              <p className="text-gray-500 dark:text-gray-400">
-                Enter your email below to login to your account
-              </p>
+    <main className=" bg-gray-100">
+      {/* login baru */}
+      <div className="min-h-screen flex items-center justify-center w-full dark:bg-gray-950">
+        <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg px-10 py-8 max-w-md">
+          <h1 className="text-2xl font-semibold text-center mb-4 dark:text-gray-200">
+            Welcome back Threaders!
+          </h1>
+          <form action="#">
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                name="email"
+                placeholder="email@domain.com"
+                onChange={handleChangeInput}
+                required
+              ></input>
             </div>
-            <div className="space-y-4">
-              <div className="flex flex-col space-y-2">
-                <label htmlFor="email">Email</label>
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Password
+              </label>
+              <div className="relative">
                 <input
+                  className="shadow-sm rounded-md w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                   required
-                  type="email"
-                  name="email"
-                  placeholder="email@domain.com"
+                  name="password"
+                  placeholder="password"
+                  type={showPassword ? "text" : "password"}
                   onChange={handleChangeInput}
-                  className="input input-primary"
-                />
-              </div>
-
-              <div className="flex flex-col space-y-2 relative">
-                <div className="flex justify-between">
-                  <label htmlFor="password">Password</label>
-                  <Link className="text-sm underline" href="/resetpassword">
-                    Forgot your password?
-                  </Link>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    required
-                    name="password"
-                    placeholder="password"
-                    type={showPassword ? "text" : "password"}
-                    onChange={handleChangeInput}
-                    className="input input-primary w-full"
-                  />
-                  <div
-                    className="absolute top-14 right-3 transform -translate-y-1/2 cursor-pointer"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {showPassword ? <Eye /> : <EyeOff />}{" "}
-                  </div>
+                ></input>
+                <div
+                  className="absolute inset-y-0 right-0 flex cursor-pointer items-center mr-2"
+                  onClick={togglePasswordVisibility}
+                >
+                  {showPassword ? <Eye size={24} /> : <EyeOff size={24} />}
                 </div>
               </div>
-              <button
-                className="w-full btn btn-active bg-blue-500 hover:bg-blue-600 text-white"
-                type="submit"
-                onClick={handleLogin}
-              >
-                Login
-              </button>
             </div>
-            <div className="mt-4 text-center text-sm">
-              Don't have an account?
-              <Link className="underline" href="/register">
-                Sign up
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center">
+                <Link
+                  href="/resetpassword"
+                  className="hover:btn hover:btn-xs hover:btn-info text-xs text-gray-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Forgot Password?
+                </Link>
+              </div>
+              <Link
+                href="/register"
+                className="hover:btn hover:btn-xs hover:btn-info text-xs text-indigo-500 hover:text-white  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Create Account
               </Link>
             </div>
-          </div>
-        </div>
-        <div className="hidden bg-twitter lg:block dark:bg-gray-800">
-          <img
-            alt="Image"
-            className="h-full w-full object-cover"
-            height="1080"
-            src="https://t4.ftcdn.net/jpg/01/19/11/55/360_F_119115529_mEnw3lGpLdlDkfLgRcVSbFRuVl6sMDty.jpg"
-            style={{
-              aspectRatio: "1920/1080",
-              objectFit: "cover",
-            }}
-            width="1920"
-          />
+            <button
+              onClick={handleLogin}
+              type="button"
+              className="w-full btn bg-blue-500  text-white  hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Login
+            </button>
+          </form>
         </div>
       </div>
     </main>

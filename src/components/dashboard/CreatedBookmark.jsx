@@ -8,13 +8,12 @@ export const CreatedThreads = () => {
   const [threads, setThreads] = useState([]);
 
   useEffect(() => {
-    // Fetch user data from localStorage
-    const user = JSON.parse(localStorage.getItem("user"));
-    const USER_ID = user ? user.id : null; // Extract the user ID from localStorage
-
-    // Function to fetch threads
-    const getThreads = async () => {
+    const fetchThreads = async () => {
       try {
+        // Fetch user data from localStorage
+        const user = JSON.parse(localStorage.getItem("user"));
+        const USER_ID = user ? user.id : null; // Extract the user ID from localStorage
+
         // Fetch threads using the user ID
         const fetchUrl = USER_ID
           ? `/api/v1/threads?userid=${USER_ID}`
@@ -24,6 +23,8 @@ export const CreatedThreads = () => {
         if (res.status === 200) {
           toast.success(data.message);
           setThreads(data.data);
+          // Cache threads data in localStorage
+          localStorage.setItem("threads", JSON.stringify(data.data));
         } else {
           toast.error(`${res.status} ${data.message}`);
         }
@@ -32,24 +33,29 @@ export const CreatedThreads = () => {
       }
     };
 
-    // Fetch threads when component mounts
-    getThreads();
+    fetchThreads();
   }, []);
 
   return (
-    <main className="flex flex-col gap-8 p-8 md:p-20 justify-center items-center min-h-dvh">
-      <h1 className="text-3xl font-bold">Created Threads</h1>
+    <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center min-h-dvh">
       {threads?.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {threads.map((thread) => (
             <div key={thread.threadId} className="flex flex-col gap-0">
-              <Tweet id={thread.threadId} />
+              <div className="flex items-center absolute">
+                <div className=" border rounded-md p-0.5 bg-gray-100 text-xs my-0">
+                  {thread.category}
+                </div>
+              </div>
+              <div className="mt-2">
+                <Tweet id={thread.threadId} />
+              </div>
             </div>
           ))}
         </div>
       ) : (
         <div className="border rounded-md flex justify-center items-center p-4">
-          <p className="text-xl font-bold">No threads found.</p>
+          <p className="text-xl font-bold">No threads created yet.</p>
         </div>
       )}
     </main>
