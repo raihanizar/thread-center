@@ -52,6 +52,7 @@ export const CreateThreads = ({ userData }) => {
 
     const data = await res.json();
     toast.success("Create thread success!");
+    window.location.replace("/dashboard");
   }
 
   return (
@@ -67,7 +68,7 @@ export const CreateThreads = ({ userData }) => {
             className="textarea textarea-info h-40 w-full border rounded-md px-4 focus:outline-none focus:border-blue-500"
           />
         </div>
-        <div className="flex flex-col mb-2">
+        <div className="flex flex-col">
           <label className="block text-base text-gray-700">
             Thread category
           </label>
@@ -90,7 +91,7 @@ export const CreateThreads = ({ userData }) => {
         </div>
         <button
           onClick={handleSubmitThread}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          className="btn btn-sm w-fit bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 rounded"
         >
           Post Thread
         </button>
