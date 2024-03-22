@@ -271,18 +271,21 @@ export const ExploreThreads = ({ userData }) => {
               <div className="font-semibold -mt-5">
                 {bookmarksByCurrentUser.includes(thread.id) ? (
                   <>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-between">
                       <div
-                        className="border-gray-400 hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
-                        data-tip="delete bookmark"
+                      // className="border-gray-400 hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                      // data-tip="delete bookmark"
                       >
-                        <BookmarkX
-                          color="#c70000"
+                        <button
+                          className="btn btn-outline btn-sm font-sans font-medium"
+                          // color="#c70000"
                           onClick={() => handleUnbookmark(thread.id)}
-                        />
+                        >
+                          unbookmark
+                        </button>
                       </div>
                       <div
-                        className={`badge border-gray-300 text-xs my-0 ${
+                        className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
                           categoryColors[thread.category]
                         }`}
                       >
@@ -292,18 +295,21 @@ export const ExploreThreads = ({ userData }) => {
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-between">
                       <div
-                        className="border-gray-100 hover:cursor-pointer object-left-bottom border rounded-md p-0.5  text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
-                        data-tip="bookmark thread"
+                      // className="border-gray-100 hover:cursor-pointer object-left-bottom border rounded-md p-0.5  text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                      // data-tip="bookmark thread"
                       >
-                        <Bookmark
-                          color="#26a7de"
+                        <button
+                          className="btn btn-info btn-sm text-white font-sans font-normal"
+                          // color="#26a7de"
                           onClick={() => handleBookmark(thread.id)}
-                        />
+                        >
+                          bookmark
+                        </button>
                       </div>
                       <div
-                        className={`badge border-gray-100 text-xs my-0 ${
+                        className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
                           categoryColors[thread.category]
                         }`}
                       >
