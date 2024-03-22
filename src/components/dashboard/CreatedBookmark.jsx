@@ -50,7 +50,7 @@ export const CreatedThreads = () => {
   }, []);
 
   return (
-    <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center min-h-dvh">
+    <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center">
       {threads?.length > 0 ? (
         <div className="sm:columns-2 gap-5 max-w-screen-xl  lg:columns-3 mb-10">
           {threads.map((thread) => (

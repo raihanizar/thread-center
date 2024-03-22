@@ -35,6 +35,11 @@ export const ExploreThreads = ({ userData }) => {
     HUMOR: "bg-pink-200",
     HEALTH_AND_WELLNESS: "bg-lime-200",
   };
+
+  function replaceUnderscoreWithSpace(category) {
+    return category.replace(/_/g, " ");
+  }
+
   // const [userData, setUserData] = useState({})
   const [isClicked, setIsClicked] = useState([
     true,
@@ -254,7 +259,7 @@ export const ExploreThreads = ({ userData }) => {
             isTrending={index === 0}
             onClick={() => handleCategoryClick(index, category)}
             isClicked={isClicked[index]}
-            categoryName={category}
+            categoryName={replaceUnderscoreWithSpace(category)}
           />
         ))}
       </div>
