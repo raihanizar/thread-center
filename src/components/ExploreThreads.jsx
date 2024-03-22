@@ -6,6 +6,7 @@ import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { BookmarkX, Bookmark } from "lucide-react";
 
 export const ExploreThreads = ({ userData }) => {
   const categories = [
@@ -252,13 +253,15 @@ export const ExploreThreads = ({ userData }) => {
               <div className="font-semibold -mt-5">
                 {bookmarksByCurrentUser.includes(thread.id) ? (
                   <>
-                    <div className="flex items-center justify-between">
-                      <button
-                        className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded"
-                        onClick={() => handleUnbookmark(thread.id)}
+                    <div className="flex items-center">
+                      <div
+                        className=" hover:cursor-pointer object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
+                        data-tip="delete bookmark"
                       >
-                        Unbookmark Tweet
-                      </button>
+                        <BookmarkX
+                          onClick={() => handleUnbookmark(thread.id)}
+                        />
+                      </div>
                       <div className="badge badge-outline text-xs my-0">
                         {thread.category}
                       </div>
@@ -266,13 +269,13 @@ export const ExploreThreads = ({ userData }) => {
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center gap-1 justify-between">
-                      <button
-                        className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded"
-                        onClick={() => handleBookmark(thread.id)}
+                    <div className="flex items-center gap-1">
+                      <div
+                        className=" hover:cursor-pointer object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
+                        data-tip="bookmark thread"
                       >
-                        Bookmark Tweet
-                      </button>
+                        <Bookmark onClick={() => handleBookmark(thread.id)} />
+                      </div>
                       <div className="badge badge-outline text-xs my-0">
                         {thread.category}
                       </div>
