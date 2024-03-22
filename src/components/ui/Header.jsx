@@ -11,7 +11,7 @@ export function Header({ userData }) {
   function handleLogout() {
     localStorage.removeItem("user");
     Cookies.remove("token");
-    router.push("/explore");
+    router.push("/");
   }
 
   return (
@@ -21,7 +21,7 @@ export function Header({ userData }) {
         <div className="flex flex-row items-center gap-8">
           <Link
             className={`text-lg font-bold hover:underline hover:cursor-pointer`}
-            href={"/explore"}
+            href={"/"}
           >
             Explore
           </Link>

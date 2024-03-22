@@ -1,9 +1,23 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { ExploreThreads } from "@/components/ExploreThreads";
+import { Header } from "@/components/ui/Header";
+import React, { useEffect, useState } from "react";
+
+export default function Page() {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const userDataStr = localStorage.getItem("user");
+    const userDataJson = JSON.parse(userDataStr);
+    setUserData(userDataJson);
+  }, []);
+
   return (
-    <main className="flex justify-center items-center h-dvh">
-      <p className="text-3xl font-bold">ThreadCenter is coming soon! 🚧</p>
-    </main>
-  );
+    <>
+      <Header userData={userData} />
+      <ExploreThreads userData={userData} />
+    </>
+  )
 }
+
