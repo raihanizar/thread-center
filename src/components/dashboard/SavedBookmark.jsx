@@ -124,7 +124,7 @@ export const SavedBookmarks = () => {
                       <button
                         className="btn btn-outline btn-sm font-sans font-medium"
                         // color="#c70000"
-                        onClick={() => handleUnbookmark(thread.id)}
+                        onClick={() => handleUnbookmark(bookmark.threadId)}
                       >
                         unbookmark
                       </button>
