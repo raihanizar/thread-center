@@ -8,6 +8,19 @@ import { BookmarkX } from "lucide-react";
 export const SavedBookmarks = () => {
   const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
 
+  const categoryColors = {
+    NEWS: "bg-red-200",
+    POLITICS: "bg-blue-200",
+    TECHNOLOGY: "bg-cyan-200",
+    ENTERTAINMENT: "bg-purple-200",
+    SPORTS: "bg-green-200",
+    PERSONAL_DEVELOPMENT: "bg-yellow-200",
+    CULTURE: "bg-orange-200",
+    EDUCATION: "bg-indigo-200",
+    HUMOR: "bg-pink-200",
+    HEALTH_AND_WELLNESS: "bg-lime-200",
+  };
+
   useEffect(() => {
     // Fetch user data from localStorage
     const user = JSON.parse(localStorage.getItem("user"));
@@ -23,7 +36,6 @@ export const SavedBookmarks = () => {
         const res = await fetch(fetchUrl);
         const data = await res.json();
         if (res.status === 200) {
-          console.log(data.message);
           setBookmarksByCurrentUser(data.data);
 
           // Cache threads data in localStorage
@@ -88,9 +100,9 @@ export const SavedBookmarks = () => {
   };
 
   return (
-    <main className="flex flex-col gap-8 px-8 md:px-20 justify-center items-center min-h-dvh">
+    <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center min-h-dvh">
       {bookmarksByCurrentUser?.length > 0 ? (
-        <div className="sm:columns-3 gap-5 w-[1200px] mx-auto columns-2 mb-10">
+        <div className="sm:columns-2 gap-5 max-w-screen-xl  lg:columns-3 mb-10">
           {bookmarksByCurrentUser.map((bookmark) => (
             <div key={bookmark.thread.threadId} className="gap-0 inline-block">
               <span className="p-0">
@@ -100,16 +112,28 @@ export const SavedBookmarks = () => {
                 {bookmarksByCurrentUser.includes(bookmark.threadId) ? (
                   <span></span>
                 ) : (
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-between">
                     <div
-                      className=" hover:cursor-pointer object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
-                      data-tip="delete bookmark"
+                    // className="border-gray-400 hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                    // data-tip="delete bookmark"
                     >
-                      <BookmarkX
+                      {/* <BookmarkX
+                        color="#c70000"
                         onClick={() => handleUnbookmark(bookmark.threadId)}
-                      />
+                      /> */}
+                      <button
+                        className="btn btn-outline btn-sm font-sans font-medium"
+                        // color="#c70000"
+                        onClick={() => handleUnbookmark(bookmark.threadId)}
+                      >
+                        unbookmark
+                      </button>
                     </div>
-                    <div className="badge badge-outline text-xs my-0">
+                    <div
+                      className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
+                        categoryColors[bookmark.thread.category]
+                      }`}
+                    >
                       {bookmark.thread.category}
                     </div>
                   </div>

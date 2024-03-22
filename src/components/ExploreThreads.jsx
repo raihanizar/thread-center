@@ -6,6 +6,7 @@ import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { BookmarkX, Bookmark } from "lucide-react";
 
 export const ExploreThreads = ({ userData }) => {
   const categories = [
@@ -21,6 +22,19 @@ export const ExploreThreads = ({ userData }) => {
     "HUMOR",
     "HEALTH_AND_WELLNESS",
   ];
+
+  const categoryColors = {
+    NEWS: "bg-red-200",
+    POLITICS: "bg-blue-200",
+    TECHNOLOGY: "bg-cyan-200",
+    ENTERTAINMENT: "bg-purple-200",
+    SPORTS: "bg-green-200",
+    PERSONAL_DEVELOPMENT: "bg-yellow-200",
+    CULTURE: "bg-orange-200",
+    EDUCATION: "bg-indigo-200",
+    HUMOR: "bg-pink-200",
+    HEALTH_AND_WELLNESS: "bg-lime-200",
+  };
   // const [userData, setUserData] = useState({})
   const [isClicked, setIsClicked] = useState([
     true,
@@ -245,25 +259,61 @@ export const ExploreThreads = ({ userData }) => {
         ))}
       </div>
       {threads?.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="sm:columns-2 gap-5 max-w-screen-xl mx-auto lg:columns-3 mb-10">
           {threads.map((thread) => (
-            <div key={thread.threadId} className="flex flex-col gap-0">
-              <Tweet id={thread.threadId} />
-              <div>
+            <div key={thread.threadId} className="gap-0 inline-block">
+              <span className="p-0">
+                <Tweet id={thread.threadId} />
+              </span>
+              <div className="font-semibold -mt-5">
                 {bookmarksByCurrentUser.includes(thread.id) ? (
-                  <button
-                    className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded"
-                    onClick={() => handleUnbookmark(thread.id)}
-                  >
-                    Unbookmark Tweet
-                  </button>
+                  <>
+                    <div className="flex items-center justify-between">
+                      <div
+                      // className="border-gray-400 hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                      // data-tip="delete bookmark"
+                      >
+                        <button
+                          className="btn btn-outline btn-sm font-sans font-medium"
+                          // color="#c70000"
+                          onClick={() => handleUnbookmark(thread.id)}
+                        >
+                          unbookmark
+                        </button>
+                      </div>
+                      <div
+                        className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
+                          categoryColors[thread.category]
+                        }`}
+                      >
+                        {thread.category}
+                      </div>
+                    </div>
+                  </>
                 ) : (
-                  <button
-                    className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded"
-                    onClick={() => handleBookmark(thread.id)}
-                  >
-                    Bookmark Tweet
-                  </button>
+                  <>
+                    <div className="flex items-center justify-between">
+                      <div
+                      // className="border-gray-100 hover:cursor-pointer object-left-bottom border rounded-md p-0.5  text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                      // data-tip="bookmark thread"
+                      >
+                        <button
+                          className="btn btn-info btn-sm text-white font-sans font-normal"
+                          // color="#26a7de"
+                          onClick={() => handleBookmark(thread.id)}
+                        >
+                          bookmark
+                        </button>
+                      </div>
+                      <div
+                        className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
+                          categoryColors[thread.category]
+                        }`}
+                      >
+                        {thread.category}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
