@@ -151,10 +151,13 @@ export const ExploreThreads = ({ userData }) => {
       const data = await res.json();
       if (res.status === 200) {
         const threadIds = data.data.map((bookmark) => bookmark.threadId);
+        console.log("bookmarksbycurretnuser")
         setBookmarksByCurrentUser(threadIds);
       } else if (res.status === 404) {
+        console.log("bookmarksbycurretnuser404")
         setBookmarksByCurrentUser([]);
       } else {
+        console.log("bookmarksbycurretnuserelse")
         console.error(`${res.status} ${data.message}`);
       }
     } catch (error) {
@@ -171,7 +174,12 @@ export const ExploreThreads = ({ userData }) => {
     // Fetch trending threads
     // getUserData();
     getTrendingThreads();
-  }, []);
+
+    // Fetch bookmarked threads
+    if (userData) {
+      getBookmarksByUser(userData.id);
+    }
+  }, [userData]);
 
   // trigger update bookmark each time user bookmarks/unbookmarks
   useEffect(() => {
