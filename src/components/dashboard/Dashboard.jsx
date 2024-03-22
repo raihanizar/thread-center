@@ -24,7 +24,7 @@ export function Dashboard({ userData }) {
     const bookmarksData = JSON.parse(localStorage.getItem("bookmarks"));
     const bookmarksCount = bookmarksData ? bookmarksData.length : 0;
     setBookmarkCount(bookmarksCount);
-  }, []);
+  }, [threadCount, bookmarkCount]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -58,24 +58,14 @@ export function Dashboard({ userData }) {
             </div>
             <div className="mt-4 flex justify-center space-x-3">
               <div className="">
-                <a
-                  href="#"
-                  // white button, text-black, bg-balance-600 on hover
-                  className="btn btn-outline btn-sm btn-info rounded-full w-32"
-                >
-                  Share
-                  <Share size={16} />
-                </a>
-              </div>
-              <div className="">
-                <a
-                  href="#"
+                <Link
+                  href="/profile"
                   // white button, text-black, bg-balance-600 on hover
                   className="btn btn-outline btn-sm btn-info rounded-full w-32"
                 >
                   Edit profile
                   <Settings2 size={16} />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
