@@ -8,6 +8,19 @@ import { BookmarkX } from "lucide-react";
 export const SavedBookmarks = () => {
   const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
 
+  const categoryColors = {
+    NEWS: "bg-red-200",
+    POLITICS: "bg-blue-200",
+    TECHNOLOGY: "bg-cyan-200",
+    ENTERTAINMENT: "bg-purple-200",
+    SPORTS: "bg-green-200",
+    PERSONAL_DEVELOPMENT: "bg-yellow-200",
+    CULTURE: "bg-orange-200",
+    EDUCATION: "bg-indigo-200",
+    HUMOR: "bg-pink-200",
+    HEALTH_AND_WELLNESS: "bg-lime-200",
+  };
+
   useEffect(() => {
     // Fetch user data from localStorage
     const user = JSON.parse(localStorage.getItem("user"));
@@ -101,7 +114,7 @@ export const SavedBookmarks = () => {
                 ) : (
                   <div className="flex items-center gap-1">
                     <div
-                      className="border-black hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                      className="border-gray-400 hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
                       data-tip="delete bookmark"
                     >
                       <BookmarkX
@@ -109,7 +122,11 @@ export const SavedBookmarks = () => {
                         onClick={() => handleUnbookmark(bookmark.threadId)}
                       />
                     </div>
-                    <div className="badge badge-outline text-xs my-0">
+                    <div
+                      className={`badge border-gray-300 text-xs my-0 ${
+                        categoryColors[bookmark.thread.category]
+                      }`}
+                    >
                       {bookmark.thread.category}
                     </div>
                   </div>

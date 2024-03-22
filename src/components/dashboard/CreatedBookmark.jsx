@@ -8,6 +8,19 @@ import { BookmarkX } from "lucide-react";
 export const CreatedThreads = () => {
   const [threads, setThreads] = useState([]);
 
+  const categoryColors = {
+    NEWS: "bg-red-200",
+    POLITICS: "bg-blue-200",
+    TECHNOLOGY: "bg-cyan-200",
+    ENTERTAINMENT: "bg-purple-200",
+    SPORTS: "bg-green-200",
+    PERSONAL_DEVELOPMENT: "bg-yellow-200",
+    CULTURE: "bg-orange-200",
+    EDUCATION: "bg-indigo-200",
+    HUMOR: "bg-pink-200",
+    HEALTH_AND_WELLNESS: "bg-lime-200",
+  };
+
   useEffect(() => {
     const fetchThreads = async () => {
       try {
@@ -50,7 +63,11 @@ export const CreatedThreads = () => {
                   <span></span>
                 ) : (
                   <div className="flex items-center gap-1">
-                    <div className="badge badge-outline text-xs my-0">
+                    <div
+                      className={`badge border-gray-300 badge-outline text-xs my-0 ${
+                        categoryColors[thread.category]
+                      }`}
+                    >
                       {thread.category}
                     </div>
                   </div>
