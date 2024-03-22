@@ -243,25 +243,41 @@ export const ExploreThreads = ({ userData }) => {
         ))}
       </div>
       {threads?.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="sm:columns-3 gap-5 w-[1200px] mx-auto columns-2 mb-10">
           {threads.map((thread) => (
-            <div key={thread.threadId} className="flex flex-col gap-0">
-              <Tweet id={thread.threadId} />
-              <div>
+            <div key={thread.threadId} className="gap-0 inline-block">
+              <span className="p-0">
+                <Tweet id={thread.threadId} />
+              </span>
+              <div className="font-semibold -mt-5">
                 {bookmarksByCurrentUser.includes(thread.id) ? (
-                  <button
-                    className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded"
-                    onClick={() => handleUnbookmark(thread.id)}
-                  >
-                    Unbookmark Tweet
-                  </button>
+                  <>
+                    <div className="flex items-center justify-between">
+                      <button
+                        className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded"
+                        onClick={() => handleUnbookmark(thread.id)}
+                      >
+                        Unbookmark Tweet
+                      </button>
+                      <div className="badge badge-outline text-xs my-0">
+                        {thread.category}
+                      </div>
+                    </div>
+                  </>
                 ) : (
-                  <button
-                    className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded"
-                    onClick={() => handleBookmark(thread.id)}
-                  >
-                    Bookmark Tweet
-                  </button>
+                  <>
+                    <div className="flex items-center gap-1 justify-between">
+                      <button
+                        className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded"
+                        onClick={() => handleBookmark(thread.id)}
+                      >
+                        Bookmark Tweet
+                      </button>
+                      <div className="badge badge-outline text-xs my-0">
+                        {thread.category}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>

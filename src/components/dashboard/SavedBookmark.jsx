@@ -23,9 +23,7 @@ export const SavedBookmarks = () => {
         const res = await fetch(fetchUrl);
         const data = await res.json();
         if (res.status === 200) {
-          console.log(data.message);
           setBookmarksByCurrentUser(data.data);
-
           // Cache threads data in localStorage
           localStorage.setItem("bookmarks", JSON.stringify(data.data));
         } else {
@@ -120,7 +118,7 @@ export const SavedBookmarks = () => {
         </div>
       ) : (
         <div className="border rounded-md flex justify-center items-center p-4">
-          <p className="text-xl font-bold">No threads found.</p>
+          <p className="text-xl font-bold">Haven't bookmark thread.</p>
         </div>
       )}
     </main>

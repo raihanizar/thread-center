@@ -69,7 +69,7 @@ export function Dashboard({ userData }) {
               </div>
               <div className="">
                 <a
-                  href="#"
+                  href="/profile"
                   // white button, text-black, bg-balance-600 on hover
                   className="btn btn-outline btn-sm btn-info rounded-full w-32"
                 >

@@ -40,8 +40,7 @@ export async function GET(req, { params }) {
 
 export async function PATCH(req, { params }) {
   const id = params.id;
-  const { newUsername, newEmail } = await req.json();
-  console.log({ newEmail, newUsername, id });
+  const { newUsername, newEmail, newPassword } = await req.json();
 
   try {
     // Find existing user
@@ -57,6 +56,20 @@ export async function PATCH(req, { params }) {
         { errorMessage: "Can't change user info. User not found" },
         { status: 404 }
       );
+    }
+
+    // Update user's password if newPassword is provided
+    if (newPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          password: hashedPassword,
+        },
+      });
     }
 
     // Update user's username if newUsername is provided
@@ -90,14 +103,34 @@ export async function PATCH(req, { params }) {
       },
     });
 
-    // Return success response with updated user data
-    return NextResponse.json(
+    // If the password or username update is successful, create JWT token
+    const payload = {
+      id: updatedUser.id,
+      email: updatedUser.email,
+      username: updatedUser.username,
+    };
+
+    // Create token
+    const token = sign(payload, process.env.JWT_SECRET, { expiresIn: "30d" });
+
+    const res = NextResponse.json(
       {
         message: "Change user info successful.",
-        data: updatedUser,
+        data: payload,
       },
       { status: 200 }
     );
+    res.cookies.set("token", token);
+    return res;
+
+    // Return success response with updated user data
+    // return NextResponse.json(
+    //   {
+    //     message: "Change user info successful.",
+    //     data: updatedUser,
+    //   },
+    //   { status: 200 }
+    // );
   } catch (error) {
     console.log(error);
     return NextResponse.error(error.message || "Internal Server Error", {

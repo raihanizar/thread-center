@@ -22,9 +22,9 @@ export const CreatedThreads = () => {
         const res = await fetch(fetchUrl);
         const data = await res.json();
         if (res.status === 200) {
-          console.log(data.message);
           setThreads(data.data);
           // Cache threads data in localStorage
+
           localStorage.setItem("threads", JSON.stringify(data.data));
         } else {
           console.error(`${res.status} ${data.message}`);
@@ -62,7 +62,7 @@ export const CreatedThreads = () => {
         </div>
       ) : (
         <div className="border rounded-md flex justify-center items-center p-4">
-          <p className="text-xl font-bold">No threads created yet.</p>
+          <p className="text-xl font-bold">Haven't create thread.</p>
         </div>
       )}
     </main>
