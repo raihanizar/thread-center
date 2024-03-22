@@ -18,8 +18,8 @@ export function Header({ userData }) {
 
   return (
     <div className="flex flex-row justify-between border-b border-slate-800 p-2 md:py-2 md:px-12">
-      <div className="flex flex-row gap-10">
-        <img src="/logo.svg" alt="logo" className="w-12 h-12" />
+      <div className="flex flex-row items-center gap-10">
+        <img src="feather.png" alt="logo" className="w-8 h-8" />
         <div className="flex flex-row items-center gap-8">
           <Link
             className={`text-lg font-bold hover:underline hover:cursor-pointer`}
