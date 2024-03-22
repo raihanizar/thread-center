@@ -75,8 +75,9 @@ export const CreateThreads = ({ userData }) => {
           <select
             name="category"
             className="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500 text-sm"
-            onChange={handleCategoryChange}
+            onChange={(event) => handleCategoryChange(event)}
           >
+            <option value="">--Choose category--</option>
             <option value="NEWS">News</option>
             <option value="POLITICS">Politics</option>
             <option value="TECHNOLOGY">Technology</option>
