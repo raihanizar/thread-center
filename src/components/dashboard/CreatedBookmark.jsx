@@ -62,9 +62,9 @@ export const CreatedThreads = () => {
                 {threads.includes(thread.threadId) ? (
                   <span></span>
                 ) : (
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-end">
                     <div
-                      className={`badge border-gray-300 badge-outline text-xs my-0 ${
+                      className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
                         categoryColors[thread.category]
                       }`}
                     >

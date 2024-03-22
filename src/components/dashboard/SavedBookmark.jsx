@@ -112,18 +112,25 @@ export const SavedBookmarks = () => {
                 {bookmarksByCurrentUser.includes(bookmark.threadId) ? (
                   <span></span>
                 ) : (
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-between">
                     <div
-                      className="border-gray-400 hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
-                      data-tip="delete bookmark"
+                    // className="border-gray-400 hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                    // data-tip="delete bookmark"
                     >
-                      <BookmarkX
+                      {/* <BookmarkX
                         color="#c70000"
                         onClick={() => handleUnbookmark(bookmark.threadId)}
-                      />
+                      /> */}
+                      <button
+                        className="btn btn-outline btn-sm font-sans font-medium"
+                        // color="#c70000"
+                        onClick={() => handleUnbookmark(thread.id)}
+                      >
+                        unbookmark
+                      </button>
                     </div>
                     <div
-                      className={`badge border-gray-300 text-xs my-0 ${
+                      className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
                         categoryColors[bookmark.thread.category]
                       }`}
                     >
