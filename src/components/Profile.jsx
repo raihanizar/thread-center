@@ -4,11 +4,9 @@ import toast from "react-hot-toast";
 
 export function Profile({ userData }) {
   const [userProfile, setUserProfile] = useState({
-    newUsername: "",
-    newEmail: "",
+    newUsername: userData?.username,
+    newEmail: userData?.email,
   });
-
-  console.log({ userData });
 
   // Function to handle input change
   function handleChangeInput(event) {
@@ -35,7 +33,6 @@ export function Profile({ userData }) {
     }
 
     const { data, message } = await res.json();
-    console.log({ data });
     localStorage.setItem("user", JSON.stringify(data));
     toast.success(message);
     setTimeout(() => {

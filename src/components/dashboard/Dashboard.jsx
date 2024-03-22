@@ -51,10 +51,10 @@ export function Dashboard({ userData }) {
             <h2 className="mt-2 text-2xl font-semibold tracking-tight text-gray-900 sm:text-4xl text-balance">
               {userData?.username}
             </h2>
-            <div className="flex items-center mt-4 justify-center space-x-1">
-              <span>{threadCount} Thread</span>
+            <div className="flex items-center mt-4 justify-center space-x-2">
+              <span>{threadCount} Thread{threadCount > 1 ? "s" : ""}</span>
               <Circle className="bg-black rounded-xl" color="black" size={6} />
-              <span>{bookmarkCount} Bookmark</span>
+              <span>{bookmarkCount} Bookmark{threadCount > 1 ? "s" : ""}</span>
             </div>
             <div className="mt-4 flex justify-center space-x-3">
               <div className="">
