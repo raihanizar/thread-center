@@ -38,7 +38,6 @@ export const ExploreThreads = ({ userData }) => {
     try {
       const res = await fetch("/api/v1/threads?trending=true");
       const data = await res.json();
-      toast.success(data.message);
       setThreads(data.data);
     } catch (error) {
       console.error(error);
@@ -63,7 +62,6 @@ export const ExploreThreads = ({ userData }) => {
       const res = await fetch(fetchUrl);
       const data = await res.json();
       if (res.status === 200) {
-        toast.success(data.message);
         setThreads(data.data);
       } else {
         toast.error(`${res.status} ${data.message}`);
@@ -152,13 +150,12 @@ export const ExploreThreads = ({ userData }) => {
       const res = await fetch(`/api/v1/bookmarks?userid=${userId}`);
       const data = await res.json();
       if (res.status === 200) {
-        toast.success(data.message);
         const threadIds = data.data.map((bookmark) => bookmark.threadId);
         setBookmarksByCurrentUser(threadIds);
       } else if (res.status === 404) {
         setBookmarksByCurrentUser([]);
       } else {
-        toast.error(`${res.status} ${data.message}`);
+        console.error(`${res.status} ${data.message}`);
       }
     } catch (error) {
       console.error(error);
