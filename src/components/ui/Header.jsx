@@ -10,6 +10,8 @@ export function Header({ userData }) {
 
   function handleLogout() {
     localStorage.removeItem("user");
+    localStorage.removeItem("bookmarks");
+    localStorage.removeItem("threads");
     Cookies.remove("token");
     router.push("/");
   }
