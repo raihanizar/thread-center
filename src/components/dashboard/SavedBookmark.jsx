@@ -126,7 +126,7 @@ export const SavedBookmarks = () => {
                         // color="#c70000"
                         onClick={() => handleUnbookmark(bookmark.threadId)}
                       >
-                        unbookmark
+                        Unbookmark
                       </button>
                     </div>
                     <div

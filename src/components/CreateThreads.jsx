@@ -27,7 +27,8 @@ export const CreateThreads = ({ userData }) => {
     // check if url valid and contain unnecessary white spaces
 
     const trimmedUrl = threadUrl.trim();
-    const regex = /^https?:\/\/twitter\.com\/[A-Za-z0-9_]+\/status\/\d{15,}$/;
+    const regex =
+      /^https?:\/\/(?:twitter\.com|x\.com)\/[A-Za-z0-9_]+\/status\/\d{15,}$/;
     if (!regex.test(trimmedUrl)) {
       toast.error("Invalid thread URL. Please enter a valid thread URL.");
       return;

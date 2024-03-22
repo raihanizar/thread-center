@@ -283,7 +283,7 @@ export const ExploreThreads = ({ userData }) => {
                           // color="#c70000"
                           onClick={() => handleUnbookmark(thread.id)}
                         >
-                          unbookmark
+                          Unbookmark
                         </button>
                       </div>
                       <div
@@ -307,7 +307,7 @@ export const ExploreThreads = ({ userData }) => {
                           // color="#26a7de"
                           onClick={() => handleBookmark(thread.id)}
                         >
-                          bookmark
+                          Bookmark
                         </button>
                       </div>
                       <div
