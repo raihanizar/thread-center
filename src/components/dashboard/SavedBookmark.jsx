@@ -23,7 +23,6 @@ export const SavedBookmarks = () => {
         const res = await fetch(fetchUrl);
         const data = await res.json();
         if (res.status === 200) {
-          console.log(data.message);
           setBookmarksByCurrentUser(data.data);
 
           // Cache threads data in localStorage
@@ -88,9 +87,9 @@ export const SavedBookmarks = () => {
   };
 
   return (
-    <main className="flex flex-col gap-8 px-8 md:px-20 justify-center items-center min-h-dvh">
+    <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center min-h-dvh">
       {bookmarksByCurrentUser?.length > 0 ? (
-        <div className="sm:columns-3 gap-5 w-[1200px] mx-auto columns-2 mb-10">
+        <div className="sm:columns-2 gap-5 max-w-screen-xl  lg:columns-3 mb-10">
           {bookmarksByCurrentUser.map((bookmark) => (
             <div key={bookmark.thread.threadId} className="gap-0 inline-block">
               <span className="p-0">
@@ -102,10 +101,11 @@ export const SavedBookmarks = () => {
                 ) : (
                   <div className="flex items-center gap-1">
                     <div
-                      className=" hover:cursor-pointer object-left-bottom border rounded-md p-0.5 bg-gray-100 text-xs my-0 tooltip tooltip-warning tooltip-left hover:bg-gray-50"
+                      className="border-black hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
                       data-tip="delete bookmark"
                     >
                       <BookmarkX
+                        color="#c70000"
                         onClick={() => handleUnbookmark(bookmark.threadId)}
                       />
                     </div>

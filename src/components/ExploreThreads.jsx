@@ -6,6 +6,7 @@ import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { BookmarkX, Bookmark } from "lucide-react";
 
 export const ExploreThreads = ({ userData }) => {
   const categories = [
@@ -151,13 +152,13 @@ export const ExploreThreads = ({ userData }) => {
       const data = await res.json();
       if (res.status === 200) {
         const threadIds = data.data.map((bookmark) => bookmark.threadId);
-        console.log("bookmarksbycurretnuser")
+        console.log("bookmarksbycurretnuser");
         setBookmarksByCurrentUser(threadIds);
       } else if (res.status === 404) {
-        console.log("bookmarksbycurretnuser404")
+        console.log("bookmarksbycurretnuser404");
         setBookmarksByCurrentUser([]);
       } else {
-        console.log("bookmarksbycurretnuserelse")
+        console.log("bookmarksbycurretnuserelse");
         console.error(`${res.status} ${data.message}`);
       }
     } catch (error) {
@@ -248,25 +249,47 @@ export const ExploreThreads = ({ userData }) => {
         ))}
       </div>
       {threads?.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="sm:columns-2 gap-5 max-w-screen-xl mx-auto lg:columns-3 mb-10">
           {threads.map((thread) => (
-            <div key={thread.threadId} className="flex flex-col gap-0">
-              <Tweet id={thread.threadId} />
-              <div>
+            <div key={thread.threadId} className="gap-0 inline-block">
+              <span className="p-0">
+                <Tweet id={thread.threadId} />
+              </span>
+              <div className="font-semibold -mt-5">
                 {bookmarksByCurrentUser.includes(thread.id) ? (
-                  <button
-                    className="text-sm font-bold p-2 flex justify-center items-center bg-slate-50 text-slate-800 border rounded"
-                    onClick={() => handleUnbookmark(thread.id)}
-                  >
-                    Unbookmark Tweet
-                  </button>
+                  <>
+                    <div className="flex items-center gap-1">
+                      <div
+                        className="border-black hover:cursor-pointer object-left-bottom border rounded-md p-0.5 text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                        data-tip="delete bookmark"
+                      >
+                        <BookmarkX
+                          color="#c70000"
+                          onClick={() => handleUnbookmark(thread.id)}
+                        />
+                      </div>
+                      <div className="badge badge-outline text-xs my-0">
+                        {thread.category}
+                      </div>
+                    </div>
+                  </>
                 ) : (
-                  <button
-                    className="text-sm font-bold p-2 flex justify-center items-center bg-blue-500 text-white border rounded"
-                    onClick={() => handleBookmark(thread.id)}
-                  >
-                    Bookmark Tweet
-                  </button>
+                  <>
+                    <div className="flex items-center gap-1">
+                      <div
+                        className="border-black hover:cursor-pointer object-left-bottom border rounded-md p-0.5  text-xs my-0 tooltip tooltip-warning tooltip-bottom hover:bg-gray-100"
+                        data-tip="bookmark thread"
+                      >
+                        <Bookmark
+                          color="#26a7de"
+                          onClick={() => handleBookmark(thread.id)}
+                        />
+                      </div>
+                      <div className="badge badge-outline text-xs my-0">
+                        {thread.category}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
