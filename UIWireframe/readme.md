@@ -1,8 +1,5 @@
 # ThreadCenter UI Wireframe
-link https://www.figma.com/file/t9f0HKjyt8RcgZqBvW0kHz/Wireframe-ThreadCenter?type=design&node-id=0%3A1&mode=design&t=giJOeQBUPTho52Mo-1
-
-## Home.png
-Displays the user's initial display when opening the ThreadCenter
+link https://www.figma.com/file/t9f0HKjyt8RcgZqBvW0kHz/Wireframe-ThreadCenter?type=design&node-id=0%3A1&mode=design&t=OR3Jq1hw5FEGJux0-1
 
 ## Explore.png
 Display when the user searches a thread in the ThreadCenter
