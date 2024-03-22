@@ -54,7 +54,7 @@ export function Dashboard({ userData }) {
             <div className="flex items-center mt-4 justify-center space-x-2">
               <span>{threadCount} Thread{threadCount > 1 ? "s" : ""}</span>
               <Circle className="bg-black rounded-xl" color="black" size={6} />
-              <span>{bookmarkCount} Bookmark{threadCount > 1 ? "s" : ""}</span>
+              <span>{bookmarkCount} Bookmark{bookmarkCount > 1 ? "s" : ""}</span>
             </div>
             <div className="mt-4 flex justify-center space-x-3">
               <div className="">
