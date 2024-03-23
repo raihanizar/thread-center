@@ -4,9 +4,11 @@ import React, { useEffect, useState } from "react";
 import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
 import { BookmarkX } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-export const SavedBookmarks = () => {
+export const SavedBookmarks = ({ updateBookmarkCount }) => {
   const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
+  const router = useRouter();
 
   const categoryColors = {
     NEWS: "bg-red-200",
@@ -37,9 +39,10 @@ export const SavedBookmarks = () => {
         const data = await res.json();
         if (res.status === 200) {
           setBookmarksByCurrentUser(data.data);
+          updateBookmarkCount(data.data.length);
 
           // Cache threads data in localStorage
-          localStorage.setItem("bookmarks", JSON.stringify(data.data));
+          // localStorage.setItem("bookmarks", JSON.stringify(data.data));
         } else {
           console.error(`${res.status} ${data.message}`);
         }
@@ -50,7 +53,7 @@ export const SavedBookmarks = () => {
 
     // Fetch threads when component mounts
     getBookmarks();
-  }, []);
+  }, [updateBookmarkCount]);
 
   // Function to handle unbookmarking of a thread
   const handleUnbookmark = async (threadId) => {
@@ -88,6 +91,7 @@ export const SavedBookmarks = () => {
             prevBookmarks.filter((bookmark) => bookmark.threadId !== threadId)
           );
           console.log(deleteData.message);
+          updateBookmarkCount(bookmarksByCurrentUser.length - 1);
         } else {
           console.error(`${deleteRes.status} ${deleteData.message}`);
         }
@@ -126,7 +130,7 @@ export const SavedBookmarks = () => {
                         // color="#c70000"
                         onClick={() => handleUnbookmark(bookmark.threadId)}
                       >
-                        unbookmark
+                        Unbookmark
                       </button>
                     </div>
                     <div
