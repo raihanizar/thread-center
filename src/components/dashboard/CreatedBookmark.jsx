@@ -5,7 +5,7 @@ import { Tweet } from "react-tweet";
 import toast from "react-hot-toast";
 import { BookmarkX } from "lucide-react";
 
-export const CreatedThreads = () => {
+export const CreatedThreads = ({ updateThreadCount }) => {
   const [threads, setThreads] = useState([]);
 
   const categoryColors = {
@@ -36,8 +36,9 @@ export const CreatedThreads = () => {
         const data = await res.json();
         if (res.status === 200) {
           setThreads(data.data);
+          updateThreadCount(data.data.length);
           // Cache threads data in localStorage
-          localStorage.setItem("threads", JSON.stringify(data.data));
+          // localStorage.setItem("threads", JSON.stringify(data.data));
         } else {
           console.error(`${res.status} ${data.message}`);
         }
@@ -47,7 +48,7 @@ export const CreatedThreads = () => {
     };
 
     fetchThreads();
-  }, []);
+  }, [updateThreadCount]);
 
   return (
     <main className="flex flex-col gap-8 px-4 md:px-20 justify-center items-center">

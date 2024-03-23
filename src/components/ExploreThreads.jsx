@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { CategoryBtn } from "./CategoryBtn";
-import { Tweet } from "react-tweet";
+import { Tweet, TweetSkeleton } from "react-tweet";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { BookmarkX, Bookmark } from "lucide-react";
 
 export const ExploreThreads = ({ userData }) => {
   const categories = [
@@ -51,9 +50,12 @@ export const ExploreThreads = ({ userData }) => {
   const [unbookmarkedThreads, setUnbookmarkedThreads] = useState([]);
   const [bookmarksByCurrentUser, setBookmarksByCurrentUser] = useState([]);
   const [tokenExists, setTokenExists] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const router = useRouter();
 
   async function getTrendingThreads() {
+    setLoading(true);
     try {
       const res = await fetch("/api/v1/threads?trending=true");
       const data = await res.json();
@@ -165,6 +167,9 @@ export const ExploreThreads = ({ userData }) => {
   }
 
   async function getBookmarksByUser(userId) {
+    if (userId === undefined) {
+      return;
+    }
     try {
       const res = await fetch(`/api/v1/bookmarks?userid=${userId}`);
       const data = await res.json();
@@ -268,7 +273,9 @@ export const ExploreThreads = ({ userData }) => {
           {threads.map((thread) => (
             <div key={thread.threadId} className="gap-0 inline-block">
               <span className="p-0">
-                <Tweet id={thread.threadId} />
+                <Suspense fallback={<TweetSkeleton />}>
+                  <Tweet id={thread.threadId} />
+                </Suspense>
               </span>
               <div className="font-semibold -mt-5">
                 {bookmarksByCurrentUser.includes(thread.id) ? (
@@ -283,13 +290,14 @@ export const ExploreThreads = ({ userData }) => {
                           // color="#c70000"
                           onClick={() => handleUnbookmark(thread.id)}
                         >
-                          unbookmark
+                          Unbookmark
                         </button>
                       </div>
                       <div
-                        className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
+                        className={`hover:cursor-pointer hover:bg-white hover:border-black border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
                           categoryColors[thread.category]
                         }`}
+                        onClick={() => getThreads(thread.category)}
                       >
                         {thread.category}
                       </div>
@@ -307,13 +315,14 @@ export const ExploreThreads = ({ userData }) => {
                           // color="#26a7de"
                           onClick={() => handleBookmark(thread.id)}
                         >
-                          bookmark
+                          Bookmark
                         </button>
                       </div>
                       <div
-                        className={`border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
+                        className={`hover:cursor-pointer hover:bg-white hover:border-black border rounded-lg p-1.5 border-gray-300 text-xs font-sans my-0 ${
                           categoryColors[thread.category]
                         }`}
+                        onClick={() => getThreads(thread.category)}
                       >
                         {thread.category}
                       </div>
@@ -324,9 +333,11 @@ export const ExploreThreads = ({ userData }) => {
             </div>
           ))}
         </div>
+      ) : loading ? (
+        <span className="loading loading-dots loading-lg mt-10"></span>
       ) : (
-        <div className="border rounded-md flex justify-center items-center p-4">
-          <p className="text-xl font-bold">No threads found.</p>
+        <div className="flex flex-col gap-8 p-8 md:p-20 justify-center items-center min-h-dvh">
+          NO THREADS FOUND
         </div>
       )}
     </main>

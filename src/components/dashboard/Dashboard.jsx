@@ -14,25 +14,35 @@ export function Dashboard({ userData }) {
   const [threadCount, setThreadCount] = useState(0);
   const [bookmarkCount, setBookmarkCount] = useState(0);
 
-  useEffect(() => {
-    // Get thread count from localStorage
-    const threadsData = JSON.parse(localStorage.getItem("threads"));
-    const threadsCount = threadsData ? threadsData.length : 0;
-    setThreadCount(threadsCount);
+  const updateBookmarkCount = (count) => {
+    setBookmarkCount(count);
+  };
 
-    // Get bookmark count from localStorage
-    const bookmarksData = JSON.parse(localStorage.getItem("bookmarks"));
-    const bookmarksCount = bookmarksData ? bookmarksData.length : 0;
-    setBookmarkCount(bookmarksCount);
-  }, [threadCount, bookmarkCount]);
+  const updateThreadCount = (count) => {
+    setThreadCount(count);
+  };
+
+  // const updateBookmarkCount = (count) => {
+  //   setThreadCount(count);
+  // };
+
+  // useEffect(() => {
+  //   // Get thread count from localStorage
+  //   // const threadsData = JSON.parse(localStorage.getItem("threads"));
+  //   // const threadsCount = threadsData ? threadsData.length : 0;
+  //   // setThreadCount(threadsCount);
+
+  //   // Get bookmark count from localStorage
+  //   const bookmarksData = JSON.parse(localStorage.getItem("bookmarks"));
+  //   const bookmarksCount = bookmarksData ? bookmarksData.length : 0;
+  //   setBookmarkCount(bookmarksCount);
+  // }, [threadCount, bookmarkCount]);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     if (tab === "created") {
       setReloadThreads(true);
-      setReloadBookmarks(false);
     } else if (tab === "saved") {
-      setReloadThreads(false);
       setReloadBookmarks(true);
     }
   };
@@ -52,9 +62,13 @@ export function Dashboard({ userData }) {
               {userData?.username}
             </h2>
             <div className="flex items-center mt-4 justify-center space-x-2">
-              <span>{threadCount} Thread{threadCount > 1 ? "s" : ""}</span>
+              <span>
+                {threadCount} Thread{threadCount > 1 ? "s" : ""}
+              </span>
               <Circle className="bg-black rounded-xl" color="black" size={6} />
-              <span>{bookmarkCount} Bookmark{bookmarkCount > 1 ? "s" : ""}</span>
+              <span>
+                {bookmarkCount} Bookmark{bookmarkCount > 1 ? "s" : ""}
+              </span>
             </div>
             <div className="mt-4 flex justify-center space-x-3">
               <div className="">
@@ -92,8 +106,18 @@ export function Dashboard({ userData }) {
       </section>
       {/* Content based on active tab */}
       <div className="mt-4">
-        {activeTab === "created" && <CreatedThreads reload={reloadThreads} />}
-        {activeTab === "saved" && <SavedBookmarks reload={reloadBookmarks} />}
+        {activeTab === "created" && (
+          <CreatedThreads
+            reload={reloadThreads}
+            updateThreadCount={updateThreadCount}
+          />
+        )}
+        {activeTab === "saved" && (
+          <SavedBookmarks
+            reload={reloadBookmarks}
+            updateBookmarkCount={updateBookmarkCount}
+          />
+        )}
       </div>
     </main>
   );
